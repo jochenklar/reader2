@@ -1,0 +1,125 @@
+#!/usr/bin/env python
+import sys,os,time,datetime,feedparser,urllib2
+from django.utils.timezone import utc
+from django.core.exceptions import ObjectDoesNotExist
+
+''' converts from feedparser to non-naive django datetime '''
+def t(timestamp):
+    return datetime.datetime.fromtimestamp(time.mktime(timestamp)).replace(tzinfo=utc)
+
+if os.path.isfile('reader2/settings.py'):
+    sys.path.append(os.getcwd())
+else:
+    sys.exit('Error: not in the root directory of the django project.');
+
+os.environ['DJANGO_SETTINGS_MODULE'] = 'reader2.settings'
+
+from feeds.models import Feed,Item
+
+for feed in Feed.objects.all():
+    print '    updating',feed
+
+    skipping = False
+
+    # fetch feed from the internetz
+    try:
+        request = urllib2.Request(feed.xmlUrl)
+        response = urllib2.urlopen(request)
+    except urllib2.HTTPError as e:
+        print '        Error. Exception:',e
+        skipping = True
+
+    # check status code
+    if not skipping:
+        if response.getcode() == 200: 
+            info = dict(response.info())
+
+            # check last modify header and skip
+            if 'last-modified' in info:
+                timestamp = t(feedparser._parse_date(info['last-modified']))
+
+                if feed.updated and timestamp < feed.updated:
+                    print '        skipping (header).'
+                    skipping = True
+        else:
+            print '        Error. Code:',response.getcode()
+            skipping = True
+
+    if not skipping:
+        # read and parse the feed
+        rss = feedparser.parse(response.read())
+
+        if 'updated_parsed' in rss['feed']:
+            timestamp = t(rss['feed']['updated_parsed'])
+
+        if 'lastBuildDate' in rss['feed']:
+            timestamp = t(rss['feed']['lastBuildDate'])
+
+        if feed.updated and timestamp < feed.updated:
+            print '        skipping (xml).'
+            skipping = True
+
+    if not skipping:
+        for entry in rss['entries']:
+            # get guid
+            if 'guid' in entry:
+                guid = entry['guid']
+            else:
+                guid = entry['link']
+
+            # get corresponding item from the database
+            try:
+                item = Item.objects.get(guid=guid)
+
+                # set updated
+                if 'updated_parsed' in entry:
+                    item.updated = t(entry['updated_parsed'])
+                else:
+                    item.updated = datetime.datetime.now().replace(tzinfo=utc)
+
+            except ObjectDoesNotExist:
+                # create a new model
+                item      = Item()
+
+                # set guid
+                item.guid = guid
+
+                # set published
+                if 'updated_parsed' in entry:
+                    item.published = t(entry['updated_parsed'])
+                elif 'published_parsed' in entry:
+                    item.published = t(entry['published_parsed'])
+                else:
+                    item.published = datetime.datetime.now().replace(tzinfo=utc)
+
+                # set updated
+                item.updated = None
+
+            # set title
+            item.title     = entry.title
+
+            # set link
+            item.link      = entry.link
+
+            # set author
+            if 'author' in entry:
+                item.author = entry['author']
+            else:
+                item.author = ''
+
+            # set html content
+            item.content = ''
+            if 'content' in entry:
+                for element in entry['content']:
+                    if element['type'] == 'text/html':
+                        item.content = element['value']
+            elif 'description' in entry:
+                item.content = entry['description']
+
+            # set corresponding feed model
+            item.feed      = feed
+
+            item.save()
+
+        feed.updated = datetime.datetime.utcnow().replace(tzinfo=utc)
+        feed.save()

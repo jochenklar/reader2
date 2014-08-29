@@ -1,0 +1,8 @@
+/reader2/settings.py
+
+*~
+*.pyc
+.DS_Store
+
+static/*
+!static/.gitkeep
