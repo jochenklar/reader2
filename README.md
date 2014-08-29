@@ -1,4 +1,4 @@
-This is my 2nd replacement for the late google reader.
+This is my 2nd atempt to replace the late google reader.
 
 **It is not ready for production yet.**
 
