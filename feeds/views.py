@@ -13,15 +13,14 @@ class CategoryViewSet(viewsets.ModelViewSet):
 class ItemViewSet(viewsets.ModelViewSet):
     serializer_class = ItemSerializer
 
+    paginate_by = 10
+    paginate_by_param = 'page_size'
+
     def get_queryset(self):
-        queryset = Item.objects.all()
+        queryset = Item.objects.order_by('-published')
 
         feed = self.request.QUERY_PARAMS.get('feed', '-1')
         if feed != '-1':
             queryset = queryset.filter(feed=feed)
-
-        begin = int(self.request.QUERY_PARAMS.get('begin','1'))
-        nrows = int(self.request.QUERY_PARAMS.get('nrows','30'))
-        queryset = queryset.order_by('-published')[begin:begin+nrows]
 
         return queryset

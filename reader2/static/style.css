@@ -140,9 +140,6 @@ nav.navbar-default .navbar-nav a,
 .item .meta {
     color: #999;
 }
-.item.new .head {
-    color: #08c;
-}
 .item .body {
     padding: 10px 10px 5px 10px;
 
@@ -153,6 +150,11 @@ nav.navbar-default .navbar-nav a,
     margin: 0;
     line-height: 20px;
     font-size: 1em;
+
+    color: #08c;
+}
+.item h2.visited {
+    color: inherit;
 }
 .item.active h2 { 
     font-weight: bold;

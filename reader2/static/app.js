@@ -1,9 +1,17 @@
 var app = angular.module('reader', ['ngSanitize','infinite-scroll']);
 
+app.config(['$httpProvider', function($httpProvider) {
+    $httpProvider.defaults.xsrfCookieName = 'csrftoken';
+    $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
+}]);
+
 app.factory('itemService', ['$http', function($http) {
     return {
         getItems: function(params) {
             return $http.get('api/items/', {params: params});
+        },
+        activateItem: function(id) {
+            return $http.patch('api/items/' + id + '/', {'visited': true});
         }
     };
 }]);
@@ -24,18 +32,24 @@ app.controller('bodyController', ['$scope', 'itemService', 'categoryService', fu
 
     $scope.canScroll = false;
 
-    $scope.first = function() {
-        $scope.activeItem = 0;
+    $scope.firstItem = function() {
+        $scope.setActiveItem(0);
     };
 
-    $scope.prev = function() {
-        if ($scope.activeItem >= 0) {
-            $scope.activeItem -= 1;
-        }
+    $scope.prevItem = function() {
+        $scope.setActiveItem($scope.activeItem - 1);
     };
     
-    $scope.next = function() {
-        $scope.activeItem += 1;
+    $scope.nextItem = function() {
+        $scope.setActiveItem($scope.activeItem + 1);
+    };
+
+    $scope.thisItem = function(i) {
+        if ($scope.activeItem == i) {
+            $scope.setActiveItem(-1);
+        } else {
+            $scope.setActiveItem(i);
+        }
     };
 
     $scope.setActiveFeed = function(id) {
@@ -43,34 +57,39 @@ app.controller('bodyController', ['$scope', 'itemService', 'categoryService', fu
         $scope.activeItem = -1;
 
         itemService.getItems({
+            'page_size': 30,
             'feed': $scope.activeFeed
         }).success(function(data) {
-            $scope.items = data;
+            $scope.items = data.results;
             $scope.canScroll = true;
         });
     };
 
     $scope.setActiveItem = function(i) {
-        if ($scope.activeItem == i) {
-            $scope.activeItem = -1;
-        } else {
+        if (i > -1) {
             $scope.activeItem = i;
+            if ($scope.items[i].visited == false) {
+                $scope.items[i].visited = true;
+                itemService.activateItem($scope.items[i].id);
+            }
+        } else {
+            $scope.activeItem = -1;
         }
     };
 
     $scope.loadMoreItems = function() {
         if ($scope.canScroll){
+            var page = $scope.items.length / 5;
+            console.log(page);
             itemService.getItems({
-                'begin': $scope.items.length + 1,
-                'nrows': 5,
+                'page_size': 5,
+                'page': ($scope.items.length / 5) + 1,
                 'feed': $scope.activeFeed
             }).success(function(data) {
-                if (data.length > 0) {
-                    $scope.items = $scope.items.concat(data);
-                } else {
-                    // everything is here, disabling infinite scroll
-                    $scope.canScroll = false;
-                }
+                $scope.items = $scope.items.concat(data.results);
+            }).error(function(data) {
+                // everything is here, disabling infinite scroll
+                $scope.canScroll = false;
             });
         }
     };
@@ -79,8 +98,10 @@ app.controller('bodyController', ['$scope', 'itemService', 'categoryService', fu
         $scope.categories = data;
     });
     
-    itemService.getItems().success(function(data) {
-        $scope.items = data;
+    itemService.getItems({
+        'page_size': 30
+    }).success(function(data) {
+        $scope.items = data.results;
         $scope.canScroll = true;
     });
 }]);

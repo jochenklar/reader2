@@ -5,8 +5,8 @@
     <h4>Items</h4>
     {% verbatim %}
     <div class="item" ng-repeat="(i,item) in items">
-        <div class="head" ng-click="activateItem(i);">
-            <h2>{{item.title}}</h2>
+        <div class="head" ng-click="thisItem(i);">
+            <h2 class="{{item.visited ? 'visited' : ''}}">{{item.title}}</h2>
             <span class="meta">{{item.feed.title}}, {{item.published}}</span>
         </div>
         <div class="body" ng-show="activeItem == i">
