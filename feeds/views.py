@@ -1,4 +1,4 @@
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 from feeds.models import *
 from feeds.serializers import *
 
@@ -11,5 +11,13 @@ class CategoryViewSet(viewsets.ModelViewSet):
     serializer_class = CategorySerializer
 
 class ItemViewSet(viewsets.ModelViewSet):
-    queryset = Item.objects.all()
     serializer_class = ItemSerializer
+
+    def get_queryset(self):
+        queryset = Item.objects.all()
+
+        feedId = self.request.QUERY_PARAMS.get('feedId', None)
+        if feedId is not None:
+            queryset = queryset.filter(feed=feedId)
+
+        return queryset

@@ -1,17 +1,18 @@
 from rest_framework import serializers
 from feeds.models import *
 
-class FeedSerializer(serializers.HyperlinkedModelSerializer):
+class FeedSerializer(serializers.ModelSerializer):
     class Meta:
         model = Feed
-        fields = ('title', 'htmlUrl', 'xmlUrl')
+        fields = ('id','title', 'htmlUrl', 'xmlUrl')
 
-class CategorySerializer(serializers.HyperlinkedModelSerializer):
+class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ('title', 'feeds')
+        fields = ('id','title', 'feeds')
+        depth = 1
 
-class ItemSerializer(serializers.HyperlinkedModelSerializer):
+class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
-        fields = ('title', 'author', 'link', 'published', 'updated', 'guid', 'content', 'feed')
+        fields = ('id','title', 'author', 'link', 'published', 'updated', 'content', 'feed')
