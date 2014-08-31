@@ -16,8 +16,12 @@ class ItemViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         queryset = Item.objects.all()
 
-        feedId = self.request.QUERY_PARAMS.get('feedId', None)
-        if feedId is not None:
-            queryset = queryset.filter(feed=feedId)
+        feed = self.request.QUERY_PARAMS.get('feed', '-1')
+        if feed != '-1':
+            queryset = queryset.filter(feed=feed)
+
+        begin = int(self.request.QUERY_PARAMS.get('begin','1'))
+        nrows = int(self.request.QUERY_PARAMS.get('nrows','30'))
+        queryset = queryset.order_by('-published')[begin:begin+nrows]
 
         return queryset

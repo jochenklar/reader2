@@ -1,21 +1,21 @@
 
 <!-- begin items -->
 
-<div id="items">
+<div id="items" infinite-scroll="loadMoreItems()" infinite-scroll-distance="0.2">
     <h4>Items</h4>
     {% verbatim %}
     <div class="item" ng-repeat="(i,item) in items">
         <div class="head" ng-click="activateItem(i);">
             <h2>{{item.title}}</h2>
-            <span class="meta">{{item.feed.name}}, {{item.date}}</span>
+            <span class="meta">{{item.feed.title}}, {{item.published}}</span>
         </div>
         <div class="body" ng-show="activeItem == i">
             <p>
-                <a href="{{item.feed.htmlUrl}}">{{item.feed.name}}</a>
+                <a target="_blank" href="{{item.feed.htmlUrl}}">{{item.feed.title}}</a>
 
                 <span>{{item.author}}</span>
 
-                <a href="{{item.url}}" target="blank" class="meta">visit page</a>
+                <a href="{{item.link}}" target="blank" class="meta">visit page</a>
             </p>
 
             <div ng-bind-html="item.content"></div>

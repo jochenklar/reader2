@@ -16,3 +16,4 @@ class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
         fields = ('id','title', 'author', 'link', 'published', 'updated', 'content', 'feed')
+        depth = 1

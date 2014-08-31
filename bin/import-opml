@@ -11,12 +11,14 @@ else:
     sys.exit('Error: not in the root directory of the django project.');
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'reader2.settings'
+from django.contrib.auth.models import User
 from feeds.models import Category,Feed
 
 try:
     inputfile = sys.argv[1]
+    username = sys.argv[2]
 except IndexError:
-    sys.exit('Error: no input file.')
+    sys.exit('USAGE: bin/import-opml inputfile username')
 
 xml = et.parse(inputfile)
 for categoryNode in xml.find('body').findall('outline'):
@@ -26,6 +28,7 @@ for categoryNode in xml.find('body').findall('outline'):
         category = Category.objects.get(title=categoryTitle)
     except ObjectDoesNotExist:
         category = Category(title=categoryTitle)
+        category.user = User.objects.get(username=username)
         category.save()
 
     for feedNode in categoryNode.findall('outline'):
@@ -36,6 +39,8 @@ for categoryNode in xml.find('body').findall('outline'):
         feed.title = feedTitle
         feed.htmlUrl = feedNode.attrib['htmlUrl']
         feed.xmlUrl = feedNode.attrib['xmlUrl']
-        feed.category = category
-
         feed.save()
+
+        category.feeds.add(feed)
+        category.save()
+        
