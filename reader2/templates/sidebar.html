@@ -1,0 +1,39 @@
+
+<!-- begin sidebar -->
+
+<div id="sidebar">
+    <div class="options">
+        <p>Last updated:</p>
+        <p>{{updated}}</p>
+    </div>
+
+    <div class="options">
+        <h4>Options</h4>
+        <ul>
+            <li><a href="#" ng-click="getItems();">Show all feeds</a></li>
+            <li><a href="/admin">Admin</a></li>
+        </ul>
+    </div>
+
+    <div class="options">
+        <h4>Categories</h4>
+        <ul class="categories">
+            {% verbatim %}
+            <li ng-repeat="category in categories">
+                <a href="#" class="category" ng-click="category.isActive = !category.isActive">
+                    <span class="glyphicon glyphicon-chevron-down pull-right"></span>
+                    <span>{{category.title}}</span>
+                </a>                
+
+                <ul ng-show="category.isActive">
+                    <li ng-repeat="feed in category.feeds">
+                        <a href="#" ng-click="getItems(feed.id);">{{feed.title}}</a>
+                    </li>
+                </ul>
+            </li>
+            {% endverbatim %}
+        </ul>
+    </div>
+</div>
+
+<!-- end sidebar -->
