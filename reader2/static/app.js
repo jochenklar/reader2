@@ -112,4 +112,36 @@ app.controller('bodyController', ['$scope','$timeout','$document','itemService',
         $scope.items = data.results;
         $scope.canScroll = true;
     });
+
+    $scope.feedFormData = {};
+    $scope.feedFormSubmitted = false;
+
+    $scope.showFeedForm = function() {
+        $('#feed-form-modal').modal();
+        $scope.feedFormSubmitted = false;
+    };
+
+    $scope.submitFeedForm = function() {
+        $scope.feedFormSubmitted = true;
+
+        if (isValid) {
+            $('#feed-form-modal').modal();
+        }
+    };
+
+    $scope.categoryFormData = {};
+    $scope.categoryFormSubmitted = false;
+
+    $scope.showCategoryForm = function() {
+        $('#category-form-modal').modal();
+        $scope.categoryFormSubmitted = false;
+    };
+
+    $scope.submitCategoryForm = function(isValid) {
+        $scope.categoryFormSubmitted = true;
+        console.log($scope.categoryFormData);
+        if (isValid) {
+            $('#category-form-modal').modal();
+        }
+    };
 }]);

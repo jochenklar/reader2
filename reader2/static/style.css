@@ -156,3 +156,8 @@ nav.navbar-fixed-bottom button.btn-navbar {
 .item img { 
     max-width: 100%;
 }
+.modal-body {
+    padding-bottom: 0;
+}
+
+
