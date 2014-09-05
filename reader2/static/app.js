@@ -24,7 +24,7 @@ app.factory('categoryService', ['$http', function($http) {
     };
 }]);
 
-app.controller('bodyController', ['$scope', 'itemService', 'categoryService', function($scope,itemService,categoryService) {
+app.controller('bodyController', ['$scope','$timeout','itemService','categoryService', function($scope,$timeout,itemService,categoryService) {
 
     $scope.activeFeed = -1;
 
@@ -67,11 +67,45 @@ app.controller('bodyController', ['$scope', 'itemService', 'categoryService', fu
 
     $scope.setActiveItem = function(i) {
         if (i > -1) {
+
             $scope.activeItem = i;
-            if ($scope.items[i].visited == false) {
+            if ($scope.items[i].visited === false) {
                 $scope.items[i].visited = true;
                 itemService.activateItem($scope.items[i].id);
             }
+
+            $timeout(function($scope) {
+                var item = $('.active');
+                var head = $('.head', item);
+                var height = item.height();
+                var windowHeight = $(window).height();
+                var top = head.offset().top;
+                var bottom = top + height;
+                var marginTop = 100;
+                var marginBottom = 80;
+
+                console.log(top);
+                console.log(bottom);
+
+                if (top - $(window).scrollTop() < marginTop) {
+                    $('html, body').animate({
+                        scrollTop: top - marginTop
+                    }, 'fast');
+                } else if (bottom - $(window).scrollTop() > windowHeight + marginTop) {
+                    if (height > windowHeight - marginTop) {
+                        // top of item on top of window
+                        $('html, body').animate({
+                            scrollTop: top - marginTop
+                        }, 'fast');
+                    } else {
+                        // bottom of item on bottom of window
+                        $('html, body').animate({
+                            scrollTop: bottom - windowHeight + marginBottom
+                        }, 'fast');
+                    }
+                }
+            }, 100);
+
         } else {
             $scope.activeItem = -1;
         }
@@ -80,7 +114,7 @@ app.controller('bodyController', ['$scope', 'itemService', 'categoryService', fu
     $scope.loadMoreItems = function() {
         if ($scope.canScroll){
             var page = $scope.items.length / 5;
-            console.log(page);
+
             itemService.getItems({
                 'page_size': 5,
                 'page': ($scope.items.length / 5) + 1,
