@@ -6,9 +6,9 @@
         <a class="navbar-brand" href="/">reader</a>
 
         <ul class="nav navbar-nav">
-            <li><a href="#" ng-click="firstItem();">First</a></li>
-            <li><a href="#" ng-click="prevItem();">Up</a></li>
-            <li><a href="#" ng-click="nextItem();">Down</a></li>
+            <li><a href="" ng-click="firstItem();">First</a></li>
+            <li><a href="" ng-click="prevItem();">Up</a></li>
+            <li><a href="" ng-click="nextItem();">Down</a></li>
         </ul>
     </div>
 </nav>
@@ -31,13 +31,13 @@
         <ul class="nav navbar-nav">
             {% verbatim %}
             <li ng-repeat="category in categories">
-                <a href="#" ng-click="category.isActive = !category.isActive">
+                <a href="" ng-click="category.isActive = !category.isActive">
                     <span>{{category.title}}</span>
                 </a>
 
                 <ul ng-show="category.isActive">
                     <li ng-repeat="feed in category.feeds">
-                        <a href="#">{{feed.title}}</a>
+                        <a href="">{{feed.title}}</a>
                     </li>
                 </ul>
             </li>

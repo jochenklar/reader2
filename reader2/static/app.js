@@ -1,4 +1,4 @@
-var app = angular.module('reader', ['ngSanitize','infinite-scroll']);
+var app = angular.module('reader', ['ngSanitize','infinite-scroll','duScroll']);
 
 app.config(['$httpProvider', function($httpProvider) {
     $httpProvider.defaults.xsrfCookieName = 'csrftoken';
@@ -24,7 +24,7 @@ app.factory('categoryService', ['$http', function($http) {
     };
 }]);
 
-app.controller('bodyController', ['$scope','$timeout','itemService','categoryService', function($scope,$timeout,itemService,categoryService) {
+app.controller('bodyController', ['$scope','$timeout','$document','itemService','categoryService', function($scope,$timeout,$document,itemService,categoryService) {
 
     $scope.activeFeed = -1;
 
@@ -69,41 +69,15 @@ app.controller('bodyController', ['$scope','$timeout','itemService','categorySer
         if (i > -1) {
 
             $scope.activeItem = i;
+
             if ($scope.items[i].visited === false) {
                 $scope.items[i].visited = true;
                 itemService.activateItem($scope.items[i].id);
             }
 
-            $timeout(function($scope) {
-                var item = $('.active');
-                var head = $('.head', item);
-                var height = item.height();
-                var windowHeight = $(window).height();
-                var top = head.offset().top;
-                var bottom = top + height;
-                var marginTop = 100;
-                var marginBottom = 80;
-
-                console.log(top);
-                console.log(bottom);
-
-                if (top - $(window).scrollTop() < marginTop) {
-                    $('html, body').animate({
-                        scrollTop: top - marginTop
-                    }, 'fast');
-                } else if (bottom - $(window).scrollTop() > windowHeight + marginTop) {
-                    if (height > windowHeight - marginTop) {
-                        // top of item on top of window
-                        $('html, body').animate({
-                            scrollTop: top - marginTop
-                        }, 'fast');
-                    } else {
-                        // bottom of item on bottom of window
-                        $('html, body').animate({
-                            scrollTop: bottom - windowHeight + marginBottom
-                        }, 'fast');
-                    }
-                }
+            $timeout(function() {
+                var element = angular.element('.active');
+                $document.scrollToElement(element, 100, 300);
             }, 100);
 
         } else {

@@ -10,7 +10,7 @@
     <div class="options">
         <h4>Options</h4>
         <ul>
-            <li><a href="#" ng-click="setActiveFeed(-1);">Show all feeds</a></li>
+            <li><a href="" ng-click="setActiveFeed(-1);">Show all feeds</a></li>
             <li><a href="/admin">Admin</a></li>
         </ul>
     </div>
@@ -20,14 +20,14 @@
         <ul class="categories">
             {% verbatim %}
             <li ng-repeat="category in categories">
-                <a href="#" class="category" ng-click="category.isActive = !category.isActive">
+                <a href="" class="category" ng-click="category.isActive = !category.isActive">
                     <span class="glyphicon glyphicon-chevron-down pull-right"></span>
                     <span>{{category.title}}</span>
                 </a>                
 
                 <ul ng-show="category.isActive">
                     <li ng-repeat="feed in category.feeds">
-                        <a href="#" ng-click="setActiveFeed(feed.id);">{{feed.title}}</a>
+                        <a href="" ng-click="setActiveFeed(feed.id);">{{feed.title}}</a>
                     </li>
                 </ul>
             </li>
