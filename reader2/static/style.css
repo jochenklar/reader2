@@ -66,18 +66,19 @@ nav.navbar-fixed-bottom button.btn-navbar {
 
 /* sidebar */
 
-.options {
+#sidebar .options {
     margin: 0;
     padding: 5px 10px;
     line-height: 19px;
 
     border-bottom: 1px solid #e6e6e6;
 }
-.options:last-child{
+#sidebar .options:last-child{
     border-bottom: none;
 }
-.options h4,
-.options p {
+
+#sidebar h4,
+#sidebar p {
     font-size: 1em;
     font-weight: bold;
     color: #777;
@@ -85,23 +86,37 @@ nav.navbar-fixed-bottom button.btn-navbar {
     margin: 0;
     padding: 0;
 }
-.options h4 {
+#sidebar h4 {
     padding-bottom: 5px;
 }
-.options ul, 
-.options li {
+#sidebar ul,
+#sidebar li {
     margin: 0;
     padding: 0;
     list-style: none;
 }
-.options a,
-.options span {
-    display: block;
-    line-height: 20px;
-    padding: 2px 0;
+/*#sidebar ul > li {
+    margin-bottom: 5px;
 }
-.options a span {
-    padding: 0px;
+#sidebar ul > li:last-child {
+    margin-bottom: 0;
+}*/
+#sidebar a {
+    display: block;
+    height: 25px;
+    line-height: 20px;
+    text-decoration: none;
+}
+#sidebar div.glyphicon {
+    margin-left: 5px;
+}
+#sidebar div.glyphicon.pull-right {
+    margin-top: 1px;
+}
+#sidebar div.category,
+#sidebar div.feed {
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 /* items */
@@ -117,7 +132,6 @@ nav.navbar-fixed-bottom button.btn-navbar {
 
     border-bottom: 1px solid #e6e6e6;
 }
-
 .item .head {
     line-height: 19px;
     padding: 5px 10px 5px 10px;
@@ -159,5 +173,3 @@ nav.navbar-fixed-bottom button.btn-navbar {
 .modal-body {
     padding-bottom: 0;
 }
-
-

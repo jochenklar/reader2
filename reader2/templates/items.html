@@ -1,30 +1,32 @@
 
 <!-- begin items -->
 
-<div id="items" infinite-scroll="loadMoreItems()" infinite-scroll-distance="0.2">
-    <h4>
-        <span class="hidden-xs">Items</span>
-        <span class="visible-xs">reader</span>
-    </h4>
-    {% verbatim %}
-    <div id="item-{{i}}" class="item {{activeItem == i ? 'active' : ''}}" ng-repeat="(i,item) in items">
-        <div class="head" ng-click="thisItem(i);">
-            <h2 class="{{item.visited ? 'visited' : ''}}">{{item.title}}</h2>
-            <span class="meta">{{item.feed.title}}, {{item.published}}</span>
+<div id="items">
+    <div infinite-scroll="loadMoreItems()" infinite-scroll-distance="0.2">
+        <h4>
+            <span class="hidden-xs">Items</span>
+            <span class="visible-xs">reader</span>
+        </h4>
+        {% verbatim %}
+        <div id="item-{{i}}" class="item {{activeItem == i ? 'active' : ''}}" ng-repeat="(i,item) in items">
+            <div class="head" ng-click="thisItem(i);">
+                <h2 class="{{item.visited ? 'visited' : ''}}">{{item.title}}</h2>
+                <span class="meta">{{item.feed.title}}, {{item.published}}</span>
+            </div>
+            <div class="body" ng-show="activeItem == i">
+                <p>
+                    <a target="_blank" href="{{item.feed.htmlUrl}}">{{item.feed.title}}</a>
+
+                    <span>{{item.author}}</span>
+
+                    <a href="{{item.link}}" target="blank" class="meta">visit page</a>
+                </p>
+
+                <div ng-bind-html="item.content"></div>
+            </div>
         </div>
-        <div class="body" ng-show="activeItem == i">
-            <p>
-                <a target="_blank" href="{{item.feed.htmlUrl}}">{{item.feed.title}}</a>
-
-                <span>{{item.author}}</span>
-
-                <a href="{{item.link}}" target="blank" class="meta">visit page</a>
-            </p>
-
-            <div ng-bind-html="item.content"></div>
-        </div>
+        {% endverbatim %}
     </div>
-    {% endverbatim %}
 </div>
 
 <!-- end items -->

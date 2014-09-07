@@ -1,82 +1,118 @@
 
 <!-- begin modals -->
 
-<div class="modal fade" id="feed-form-modal" tabindex="-1" role="dialog" aria-labelledby="input-feed-label" aria-hidden="true">
+<div class="modal fade" id="category-form-modal" tabindex="-1" role="dialog" aria-labelledby="category-form-label" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
+            {% verbatim %}
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">
                     <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
                 </button>
-                <h4 class="modal-title" id="input-feed-label">Add a new feed</h4>
+                <h4 class="modal-title" id="category-form-label">Add a new category</h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" role="form">
-                    <div class="form-group" ng-class="{'has-error': userForm.name.$invalid && !userForm.name.$pristine}">
-                        <label for="input-feed-title" class="col-sm-2 control-label">Title</label>
+                <form class="form-horizontal" role="form" id="categoryForm" name="categoryForm" novalidate>
+
+                    <div class="form-group" ng-class="{'has-error': categoryForm.title.$invalid && (!categoryForm.title.$pristine || categoryFormSubmitted)}">
+                        <label for="input-category-title" class="col-sm-2 control-label">Title</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="input-feed-title" placeholder="Title" ng-model="feedFormData.title">
+                            <input type="text" class="form-control" id="input-category-title" name="title" placeholder="Title" ng-model="categoryFormData.title" ng-maxlength="256" required />
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="input-feed-htmlurl" class="col-sm-2 control-label">Url</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="input-feed-htmlurl" placeholder="Url" ng-model="feedFormData.htmlurl">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="input-feed-xmlurl" class="col-sm-2 control-label">Feed url</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="input-feed-xmlurl" placeholder="Feed url" ng-model="feedFormData.xmlurl">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="input-feed-xmlurl" class="col-sm-2 control-label">Category</label>
-                        <div class="col-sm-10">
-                            {% verbatim %}
-                            <select class="form-control" id="input-feed-category" ng-model="feedFormData.category">
-                                <option ng-repeat="category in categories">{{category.title}}</option>
-                            </select>
-                            {% endverbatim %}
-                        </div>
-                    </div>
+
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" ng-click="submitFeedForm();">Add feed</button>
+                <button type="button" class="btn btn-primary" ng-click="submitCategoryForm(categoryForm.$valid)">
+                    <span ng-show="!categoryFormId">Add category</span>
+                    <span ng-show="categoryFormId">Update category</span>
+                </button>
             </div>
+            {% endverbatim %}
         </div>
     </div>
 </div>
 
-<div class="modal fade" id="category-form-modal" tabindex="-1" role="dialog" aria-labelledby="input-categories-label" aria-hidden="true">
+<div class="modal fade" id="feed-form-modal" tabindex="-1" role="dialog" aria-labelledby="feed-form-label" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
+            {% verbatim %}
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">
                     <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
                 </button>
-                <h4 class="modal-title" id="input-categories-label">Add a new category</h4>
+                <h4 class="modal-title" id="feed-form-label">Add a new feed</h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" role="form" name="categoryForm" ng-submit="submitCategoryForm(categoryForm.$valid)" novalidate>
-                    {% verbatim %}
-                    <div class="form-group" ng-class="{'has-error': categoryForm.name.$invalid}">
-                        <label for="input-category-title" class="col-sm-2 control-label">Title</label>
+                <form class="form-horizontal" role="form" id="feedForm" name="feedForm" novalidate>
+
+                    <div class="form-group" ng-class="{'has-error': feedForm.title.$invalid && (!feedForm.title.$pristine || feedFormSubmitted)}">
+                        <label for="input-feed-title" class="col-sm-2 control-label">Title</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="input-category-title" name="title" placeholder="Title" ng-model="categoryFormData.title" ng-minlength="1" ng-maxlength="256" required>
+                            <input type="text" class="form-control" id="input-feed-title" name="title" placeholder="Title" ng-model="feedFormData.title" ng-maxlength="256" required />
                         </div>
                     </div>
-                    {% endverbatim %}
 
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Add category</button>
+                    <div class="form-group" ng-class="{'has-error': feedForm.htmlurl.$invalid && (!feedForm.htmlurl.$pristine || feedFormSubmitted)}">
+                        <label for="input-feed-htmlurl" class="col-sm-2 control-label">HTML URL</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="input-feed-htmlurl" name="htmlurl" placeholder="HTML URL" ng-model="feedFormData.htmlurl" ng-maxlength="256" required />
+                        </div>
+                    </div>
+
+                    <div class="form-group" ng-class="{'has-error': feedForm.xmlurl.$invalid && (!feedForm.xmlurl.$pristine || feedFormSubmitted)}">
+                        <label for="input-feed-xmlurl" class="col-sm-2 control-label">Feed URL</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="input-feed-xmlurl" name="xmlurl" placeholder="Feed URL" ng-model="feedFormData.xmlurl" ng-maxlength="256" required />
+                        </div>
+                    </div>
+
+                    <div class="form-group" ng-class="{'has-error': feedForm.category.$invalid && (!feedForm.category.$pristine || feedFormSubmitted)}">
+                        <label for="input-feed-category" class="col-sm-2 control-label">Category</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" id="input-feed-category" name="category" ng-model="feedFormData.category" required>
+                                <option ng-repeat="category in categories | orderBy:'title'">
+                                    {{category.title}}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
                 </form>
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" ng-click="submitFeedForm(feedForm.$valid)">
+                    <span ng-show="!feedFormId">Add feed</span>
+                    <span ng-show="feedFormId">Update feed</span>
+                </button>
+            </div>
+            {% endverbatim %}
         </div>
     </div>
 </div>
 
+<div class="modal fade" id="delete-form-modal" tabindex="-1" role="dialog" aria-labelledby="delete-form-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            {% verbatim %}
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">
+                    <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                </button>
+                <h4 class="modal-title" id="delete-form-label">Really delete {{deleteFormType}}?</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" ng-click="submitDeleteForm()">
+                    Delete {{deleteFormType}}
+                </button>
+            </div>
+            {% endverbatim %}
+        </div>
+    </div>
+</div>
 
 <!-- end modals -->

@@ -12,6 +12,9 @@ class Feed(models.Model):
     def __unicode__(self):
         return self.title
 
+    class Meta:
+        ordering = ['title']
+
 class Category(models.Model):
     user      = models.ForeignKey(User)
 
@@ -20,6 +23,9 @@ class Category(models.Model):
 
     def __unicode__(self):
         return self.title
+
+    class Meta:
+        ordering = ['title']
 
 class Item(models.Model):
     visitedBy = models.ManyToManyField(User, default=None)
@@ -35,3 +41,6 @@ class Item(models.Model):
     
     def __unicode__(self):
         return self.title
+
+    class Meta:
+        ordering = ['-published']

@@ -7,15 +7,20 @@ class FeedSerializer(serializers.ModelSerializer):
         fields = ('id','title', 'htmlUrl', 'xmlUrl')
 
 class CategorySerializer(serializers.ModelSerializer):
+    def save_object(self, *args, **kwargs):
+        args[0].user = self.context['request'].user
+        super(CategorySerializer, self).save_object(*args, **kwargs)
+
     class Meta:
         model = Category
-        fields = ('id','title', 'feeds')
+        fields = ('id','title','feeds')
+        read_only_fields = ('id','feeds')
         depth = 1
 
 class ItemSerializer(serializers.ModelSerializer):
-    visited = serializers.SerializerMethodField('get_visited')
+    visited = serializers.SerializerMethodField('visited_serializer_method')
 
-    def get_visited(self, obj):
+    def visited_serializer_method(self, obj):
         if self.context['request'].DATA and 'visited' in self.context['request'].DATA:
             if self.context['request'].DATA['visited'] == True:
                 obj.visitedBy.add(self.context['request'].user)
