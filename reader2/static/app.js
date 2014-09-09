@@ -21,15 +21,18 @@ app.factory('categoryService', ['$http', function($http) {
         getCategories: function () {
             return $http.get('api/categories/');
         },
-        createCategory: function (data) {
+        createCategory: function(data) {
             return $http.post('api/categories/', data);
         },
-        updateCategory: function (id, data) {
+        updateCategory: function(id, data) {
             return $http.put('api/categories/' + id + '/', data);
         },
-        deleteCategory: function (id, data) {
+        deleteCategory: function(id, data) {
             return $http.delete('api/categories/' + id + '/', data);
         },
+        addFeed: function(id,feedId) {
+            return $http.patch('api/categories/' + id + '/', {'feedId': feedId});
+        }
     };
 }]);
 
@@ -54,6 +57,8 @@ app.controller('bodyController', ['$scope','$timeout','$filter','$document','ite
     $scope.activeItem = -1;
 
     $scope.canScroll = false;
+
+    $scope.editable = false;
 
     $scope.firstItem = function() {
         $scope.setActiveItem(0);
@@ -138,118 +143,158 @@ app.controller('bodyController', ['$scope','$timeout','$filter','$document','ite
 
     // category form
 
-    $scope.categoryFormData = {};
-    $scope.categoryFormSubmitted = false;
+    $scope.showCreateCategoryForm = function() {
+        $scope.form.$setPristine();
+        $scope.formSubmitted = false;
 
-    $scope.showCategoryForm = function(categoryId) {
-        $scope.categoryForm.$setPristine();
-        $scope.categoryFormSubmitted = false;
-
-        if (typeof categoryId === 'undefined') {
-            $scope.categoryFormId = null;
-            $scope.categoryFormData = {};
-        } else {
-            var category = $filter('filter')($scope.categories, {id: categoryId}, true)[0];
-            $scope.categoryFormId = category.id;
-            $scope.categoryFormData = {
-                'title': category.title
-            };
-        }
+        $scope.formId = false;
+        $scope.formData = {}
 
         $('#category-form-modal').modal('show');
     };
 
-    $scope.submitCategoryForm = function(isValid) {
-        $scope.categoryFormSubmitted = true;
+    $scope.submitCreateCategoryForm = function(isValid) {
+        $scope.formSubmitted = true;
         if (isValid) {
-            if ($scope.categoryFormId === null) {
-                categoryService.createCategory($scope.categoryFormData).success(function(data) {
-                    $scope.categories.push(data);
-                    $('#category-form-modal').modal('hide');
-                });
-            } else {
-                categoryService.updateCategory($scope.categoryFormId,$scope.categoryFormData).success(function(data) {
-                    var category = $.grep($scope.categories, function(e){return e.id == data.id;})[0];
-                    category.title = data.title;
-                    $('#category-form-modal').modal('hide');
-                });
-            }
+            categoryService.createCategory($scope.formData).success(function(data) {
+                $scope.categories.push(data);
+                $('#category-form-modal').modal('hide');
+            });
         }
+    };
+
+    $scope.showUpdateCategoryForm = function(categoryId) {
+        $scope.form.$setPristine();
+        $scope.formSubmitted = false;
+
+        var category = $filter('filter')($scope.categories, {id: categoryId}, true)[0];
+        $scope.formId = category.id;
+        $scope.formData = {
+            'title': category.title
+        };
+
+        $('#category-form-modal').modal('show');
+    };
+
+    $scope.submitUpdateCategoryForm = function(isValid) {
+        $scope.formSubmitted = true;
+        if (isValid) {
+            categoryService.updateCategory($scope.formId,$scope.formData).success(function(data) {
+                var category = $filter('filter')($scope.categories, {id: $scope.formId}, true)[0];
+                category.title = data.title;
+                $('#category-form-modal').modal('hide');
+            });
+        }
+    };
+
+    $scope.showDeleteCategoryForm = function(categoryId) {
+        $scope.formType = 'category';
+        $scope.formId = categoryId;
+
+        $('#delete-form-modal').modal('show');
+    };
+
+    $scope.submitDeleteCategoryForm = function(isValid) {
+        categoryService.deleteCategory($scope.formId).success(function() {
+            var category = $filter('filter')($scope.categories, {id: $scope.formId}, true)[0];
+            var index = $scope.categories.indexOf(category);
+            if (index != -1) {
+                $scope.categories.splice(index, 1);
+            }
+            $('#delete-form-modal').modal('hide');
+        });
     };
 
     // feed form
 
-    $scope.feedFormData = {};
-    $scope.feedFormSubmitted = false;
+    $scope.showCreateFeedForm = function() {
+        $scope.form.$setPristine();
+        $scope.formSubmitted = false;
 
-    $scope.showFeedForm = function(feedId) {
-        $scope.feedForm.$setPristine();
-        $scope.feedFormSubmitted = false;
-
-        if (typeof feedId === 'undefined') {
-            $scope.feedFormId = null;
-            $scope.feedFormData = {};
-        } else {
-            var feed = $filter('filter')($scope.categories, {id: feedId}, true)[0];
-            $scope.feedFormId = feed.id;
-            $scope.feedFormData = {
-                // 'title': feed.title,
-                // 'htmlurl': feed.title,
-                // 'xmlurl': feed.title,
-                // 'category': feed.title,
-            };
-        }
+        $scope.formId = false;
+        $scope.formData = {}
 
         $('#feed-form-modal').modal('show');
     };
 
-    $scope.submitFeedForm = function(isValid) {
+    $scope.submitCreateFeedForm = function(isValid) {
         $scope.feedFormSubmitted = true;
         if (isValid) {
-            if ($scope.feedFormId === null) {
-                feedService.createFeed($scope.feedFormData).success(function(data) {
-                    $scope.categories.push(data);
-                    $('#feed-form-modal').modal('hide');
-                });
-            } else {
-                feedService.updateFeed($scope.feedFormId,$scope.feedFormData).success(function(data) {
-                    var feed = $.grep($scope.categories, function(e){return e.id == data.id;})[0];
-                    feed.title = data.title;
-                    $('#feed-form-modal').modal('hide');
-                });
-            }
+            var categoryId = parseInt($scope.formData.categoryId);
+            var category = $filter('filter')($scope.categories, {id: categoryId}, true)[0];
+
+            feedService.createFeed($scope.formData).success(function(data) {
+                category.feeds.push(data);
+                $('#feed-form-modal').modal('hide');
+            });
         }
     };
 
-    // delete form
+    $scope.showUpdateFeedForm = function(categoryId,feedId) {
+        $scope.form.$setPristine();
+        $scope.formSubmitted = false;
 
-    $scope.showDeleteForm = function(type,id) {
-        $scope.deleteFormType = type;
-        $scope.deleteFormId = id;
+        var category = $filter('filter')($scope.categories, {id: categoryId}, true)[0];
+        var feed = $filter('filter')(category.feeds, {id: feedId}, true)[0];
+
+        $scope.formId = feedId;
+        $scope.formCategoryId = categoryId;
+        $scope.formData = {
+            'title':feed.title,
+            'htmlUrl': feed.htmlUrl,
+            'xmlUrl': feed.xmlUrl,
+            'categoryId': categoryId
+        };
+
+        $('#feed-form-modal').modal('show');
+    };
+
+    $scope.submitUpdateFeedForm = function(isValid) {
+        $scope.feedFormSubmitted = true;
+        if (isValid) {
+            var categoryId = parseInt($scope.formData.categoryId);
+            var category = $filter('filter')($scope.categories, {id: categoryId}, true)[0];
+
+            feedService.updateFeed($scope.formId,$scope.formData).success(function(data) {
+                var feed = $filter('filter')(category.feeds, {id: $scope.formId}, true)[0];
+                if (typeof feed === 'undefined') {
+                    // we switched categories
+                    category.feeds.push(data);
+
+                    // get rid of the old feed
+                    var oldCategory = $filter('filter')($scope.categories, {id: $scope.formCategoryId}, true)[0];
+                    var oldFeed = $filter('filter')(oldCategory.feeds, {id: $scope.formId}, true)[0];
+                    var index = oldCategory.feeds.indexOf(oldFeed);
+                    if (index != -1) {
+                        oldCategory.feeds.splice(index, 1);
+                    }
+                } else {
+                    feed.title = data.title;
+                    feed.htmlUrl = data.htmlUrl;
+                    feed.xmlUrl = data.xmlUrl;
+                }
+                $('#feed-form-modal').modal('hide');
+            });
+        }
+    };
+
+    $scope.showDeleteFeedForm = function(categoryId,feedId) {
+        $scope.formType = 'feed';
+        $scope.formId = feedId;
+        $scope.formCategoryId = categoryId;
         $('#delete-form-modal').modal('show');
     };
 
-    $scope.submitDeleteForm = function(isValid) {
-        if ($scope.deleteFormType === "category") {
-            categoryService.deleteCategory($scope.deleteFormId).success(function() {
-                var category = $filter('filter')($scope.categories, {id: $scope.deleteFormId}, true)[0];
-                var index = $scope.categories.indexOf(category);
-                if (index != -1) {
-                    $scope.categories.splice(index, 1);
-                }
-                $('#delete-form-modal').modal('hide');
-            });
-        } else if ($scope.deleteFormType === "feed") {
-            feedService.deleteFeed($scope.deleteFormId).success(function() {
-                var feed = $filter('filter')($scope.categories, {id: $scope.deleteFormId}, true)[0];
-                var index = $scope.categories.indexOf(feed);
-                if (index != -1) {
-                    $scope.categories.splice(index, 1);
-                }
-                $('#delete-form-modal').modal('hide');
-            });
-        }
-    };
+    $scope.submitDeleteFeedForm = function(isValid) {
+        feedService.deleteFeed($scope.formId).success(function() {
+            var category = $filter('filter')($scope.categories, {id: $scope.formCategoryId}, true)[0];
+            var feed = $filter('filter')(category.feeds, {id: $scope.formId}, true)[0];
 
-    $scope.editable = true;
+            var index = category.feeds.indexOf(feed);
+            if (index != -1) {
+                category.feeds.splice(index, 1);
+            }
+            $('#delete-form-modal').modal('hide');
+        });
+    };
 }]);

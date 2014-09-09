@@ -24,23 +24,24 @@
         <ul class="categories">
             {% verbatim %}
             <li ng-repeat="category in categories | orderBy:'title'">
-                <a href="" class="pull-right" ng-show="editable" ng-click="showDeleteForm('category',category.id)">
+                <a href="" class="pull-right" ng-show="editable" ng-click="showDeleteCategoryForm(category.id)">
                     <div class="glyphicon glyphicon-remove"></div>
                 </a>
-                <a href="" class="pull-right" ng-show="editable" ng-click="showCategoryForm(category.id)">
+                <a href="" class="pull-right" ng-show="editable" ng-click="showUpdateCategoryForm(category.id)">
                     <div class="glyphicon glyphicon-pencil"></div>
                 </a>
                 <a href="" ng-click="category.isActive = !category.isActive">
-                    <div class="glyphicon glyphicon-chevron-down pull-right"></div>
+                    <div class="glyphicon glyphicon-chevron-down pull-right" ng-show="!category.isActive"></div>
+                    <div class="glyphicon glyphicon-chevron-up pull-right" ng-show="category.isActive"></div>
                     <div class="category">{{category.title}}</div>
                 </a>
 
                 <ul ng-show="category.isActive">
-                    <li ng-repeat="feed in category.feeds">
-                        <a href="" class="pull-right" ng-show="editable" ng-click="showDeleteForm('feed',feed.id)">
+                    <li ng-repeat="feed in category.feeds | orderBy:'title'">
+                        <a href="" class="pull-right" ng-show="editable" ng-click="showDeleteFeedForm(category.id,feed.id)">
                             <div class="glyphicon glyphicon-remove"></div>
                         </a>
-                        <a href="" class="pull-right" ng-show="editable" ng-click="showFeedForm(feed.id)">
+                        <a href="" class="pull-right" ng-show="editable" ng-click="showUpdateFeedForm(category.id,feed.id)">
                             <div class="glyphicon glyphicon-pencil"></div>
                         </a>
                         <a href="" ng-click="setActiveFeed(feed.id);">
@@ -55,8 +56,8 @@
 
     <div class="options">
         <ul>
-            <li><a href="" ng-show="editable" ng-click="showFeedForm()">Add new feed</a></li>
-            <li><a href="" ng-show="editable" ng-click="showCategoryForm()">Add new category</a></li>
+            <li><a href="" ng-show="editable" ng-click="showCreateFeedForm()">Add new feed</a></li>
+            <li><a href="" ng-show="editable" ng-click="showCreateCategoryForm()">Add new category</a></li>
         </ul>
     </div>
 </div>

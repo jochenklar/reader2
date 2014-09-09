@@ -76,7 +76,6 @@ nav.navbar-fixed-bottom button.btn-navbar {
 #sidebar .options:last-child{
     border-bottom: none;
 }
-
 #sidebar h4,
 #sidebar p {
     font-size: 1em;
@@ -95,15 +94,9 @@ nav.navbar-fixed-bottom button.btn-navbar {
     padding: 0;
     list-style: none;
 }
-/*#sidebar ul > li {
-    margin-bottom: 5px;
-}
-#sidebar ul > li:last-child {
-    margin-bottom: 0;
-}*/
 #sidebar a {
     display: block;
-    height: 25px;
+    margin-bottom: 5px;
     line-height: 20px;
     text-decoration: none;
 }
@@ -117,6 +110,7 @@ nav.navbar-fixed-bottom button.btn-navbar {
 #sidebar div.feed {
     overflow: hidden;
     text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 /* items */

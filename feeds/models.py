@@ -19,7 +19,7 @@ class Category(models.Model):
     user      = models.ForeignKey(User)
 
     title     = models.SlugField(max_length=1024)
-    feeds     = models.ManyToManyField(Feed, related_name='categories')
+    feeds     = models.ManyToManyField(Feed, related_name='categories',blank=True)
 
     def __unicode__(self):
         return self.title
