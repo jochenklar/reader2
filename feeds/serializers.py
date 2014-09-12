@@ -7,7 +7,7 @@ class FeedSerializer(serializers.ModelSerializer):
 
         if obj.id == None:
             obj.save()
-            obj.users.add()
+            obj.users.add(user)
 
         if 'categoryId' in self.context['request'].DATA:
             # look for the old cateory for this feed and user

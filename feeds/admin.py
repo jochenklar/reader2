@@ -11,6 +11,7 @@ class FeedAdmin(admin.ModelAdmin):
 class ItemAdmin(admin.ModelAdmin):
     ordering = ['id']
 
+admin.site.register(Meta)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Feed, FeedAdmin)
 admin.site.register(Item, ItemAdmin)

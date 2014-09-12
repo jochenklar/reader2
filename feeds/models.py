@@ -1,6 +1,25 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+# this is a singleton model
+class SingletonModel(models.Model):
+    class Meta:
+        abstract = True
+
+    def save(self, *args, **kwargs):
+        self.__class__.objects.exclude(id=self.id).delete()
+        super(SingletonModel, self).save(*args, **kwargs)
+
+    @classmethod
+    def load(cls):
+        try:
+            return cls.objects.get()
+        except cls.DoesNotExist:
+            return cls()
+
+class Meta(SingletonModel):
+    updated   = models.DateTimeField(null=True)
+
 class Feed(models.Model):
     users     = models.ManyToManyField(User, related_name='feeds')
 

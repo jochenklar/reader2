@@ -14,7 +14,7 @@ else:
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'reader2.settings'
 
-from feeds.models import Feed,Item
+from feeds.models import Feed,Item,Meta
 
 for feed in Feed.objects.all():
     print '    updating',feed
@@ -123,3 +123,8 @@ for feed in Feed.objects.all():
 
         feed.updated = datetime.datetime.utcnow().replace(tzinfo=utc)
         feed.save()
+
+# if everything went well set the updated field
+meta = Meta.load()
+meta.updated = datetime.datetime.utcnow().replace(tzinfo=utc)
+meta.save()

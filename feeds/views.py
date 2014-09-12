@@ -8,28 +8,29 @@ from feeds.serializers import *
 class FeedViewSet(viewsets.ModelViewSet):
     authentication_classes = (SessionAuthentication,)
     permission_classes = (IsAuthenticated,)
+    serializer_class = FeedSerializer
 
     queryset = Feed.objects.all()
-    serializer_class = FeedSerializer
+    
 
 class CategoryViewSet(viewsets.ModelViewSet):
     authentication_classes = (SessionAuthentication,)
     permission_classes = (IsAuthenticated,)
-
-    queryset = Category.objects.all()
     serializer_class = CategorySerializer
+
+    def get_queryset(self):
+        return Category.objects.filter(user=self.request.user)
 
 class ItemViewSet(viewsets.ModelViewSet):
     authentication_classes = (SessionAuthentication,)
     permission_classes = (IsAuthenticated,)
-
     serializer_class = ItemSerializer
 
     paginate_by = 10
     paginate_by_param = 'page_size'
 
     def get_queryset(self):
-        queryset = Item.objects.order_by('-published')
+        queryset = Item.objects.filter(feed__users=self.request.user)
 
         feed = self.request.QUERY_PARAMS.get('feed', '-1')
         if feed != '-1':

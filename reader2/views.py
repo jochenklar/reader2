@@ -5,10 +5,11 @@ from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 
 from forms import LoginForm
+from feeds.models import Meta
 
 def index(request):
     if request.user.is_authenticated():
-        return render(request,'layout.html')
+        return render(request,'layout.html', {'updated': Meta.load().updated})
     else:
         return HttpResponseRedirect('/login/')
 
