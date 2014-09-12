@@ -1,0 +1,24 @@
+
+<!-- begin login -->
+
+<form id="login-form" action="/login/" method="post" role="form">
+    {% csrf_token %}
+    {% for field in form %}
+    <div class="form-group {{field.errors|yesno:"has-error,"}}">
+        <label class="control-label" for="{{field.id_for_label}}">
+            {{field.label}}
+        </label>
+        <div class="controls">
+            {{ field }}
+        </div>
+        <div class="control-label" style="text-align: left;">
+            {% for error in field.errors %}
+                {{error}}
+            {% endfor %}
+        </div>
+    </div>
+    {% endfor %}
+    <input class="btn btn-primary" type="submit" value="Login" />
+</form>
+
+<!-- begin login -->

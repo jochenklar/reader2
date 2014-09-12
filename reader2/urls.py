@@ -6,7 +6,9 @@ admin.autodiscover()
 from feeds import urls
 
 urlpatterns = patterns('',
-    url(r'^$', TemplateView.as_view(template_name="layout.html")),
+    url(r'^$', 'reader2.views.index'),
+    url(r'^login/$', 'reader2.views.login'),
+    url(r'^logout/$', 'reader2.views.logout'),
     url(r'^api/', include(urls)),
     url(r'^admin/', include(admin.site.urls))
 )

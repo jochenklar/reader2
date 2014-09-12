@@ -5,16 +5,19 @@
     <div class="navbar-header">
         <a class="navbar-brand" href="/">reader</a>
 
+        {% if not login %}
         <ul class="nav navbar-nav">
             <li><a href="" ng-click="firstItem();">First</a></li>
             <li><a href="" ng-click="prevItem();">Up</a></li>
             <li><a href="" ng-click="nextItem();">Down</a></li>
         </ul>
+        {% endif %}
     </div>
 </nav>
 
 <nav class="navbar navbar-default navbar-fixed-bottom visible-xs" role="navigation">
     <div class="navbar-header">
+
         <button class="btn btn-default btn-navbar" ng-click="firstItem();">First</button>
         <button class="btn btn-default btn-navbar" ng-click="prevItem();">Up</button>
         <button class="btn btn-default btn-navbar" ng-click="nextItem();">Down</button>
