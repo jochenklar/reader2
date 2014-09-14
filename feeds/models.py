@@ -20,6 +20,9 @@ class SingletonModel(models.Model):
 class Meta(SingletonModel):
     updated   = models.DateTimeField(null=True)
 
+    class Meta:
+        verbose_name_plural = 'Meta'
+
 class Feed(models.Model):
     users     = models.ManyToManyField(User, related_name='feeds')
 

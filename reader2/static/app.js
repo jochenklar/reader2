@@ -58,7 +58,7 @@ app.controller('bodyController', ['$scope','$timeout','$filter','$document','ite
 
     $scope.canScroll = false;
 
-    $scope.editable = false;
+    $scope.editable = true;
 
     $scope.firstItem = function() {
         $scope.setActiveItem(0);
@@ -144,19 +144,20 @@ app.controller('bodyController', ['$scope','$timeout','$filter','$document','ite
     // category form
 
     $scope.showCreateCategoryForm = function() {
-        $scope.form.$setPristine();
-        $scope.formSubmitted = false;
+        $scope.categoryForm.$setPristine();
+        $scope.categoryFormSubmitted = false;
 
-        $scope.formId = false;
-        $scope.formData = {};
+        $scope.categoryFormId = false;
+        $scope.categoryFormData = {};
 
         $('#category-form-modal').modal('show');
     };
 
     $scope.submitCreateCategoryForm = function(isValid) {
-        $scope.formSubmitted = true;
+        $scope.categoryFormSubmitted = true;
+
         if (isValid) {
-            categoryService.createCategory($scope.formData).success(function(data) {
+            categoryService.createCategory($scope.categoryFormData).success(function(data) {
                 $scope.categories.push(data);
                 $('#category-form-modal').modal('hide');
             });
@@ -164,12 +165,12 @@ app.controller('bodyController', ['$scope','$timeout','$filter','$document','ite
     };
 
     $scope.showUpdateCategoryForm = function(categoryId) {
-        $scope.form.$setPristine();
-        $scope.formSubmitted = false;
+        $scope.categoryForm.$setPristine();
+        $scope.categoryFormSubmitted = false;
 
         var category = $filter('filter')($scope.categories, {id: categoryId}, true)[0];
-        $scope.formId = category.id;
-        $scope.formData = {
+        $scope.categoryFormId = category.id;
+        $scope.categoryFormData = {
             'title': category.title
         };
 
@@ -177,10 +178,10 @@ app.controller('bodyController', ['$scope','$timeout','$filter','$document','ite
     };
 
     $scope.submitUpdateCategoryForm = function(isValid) {
-        $scope.formSubmitted = true;
+        $scope.categoryFormSubmitted = true;
         if (isValid) {
-            categoryService.updateCategory($scope.formId,$scope.formData).success(function(data) {
-                var category = $filter('filter')($scope.categories, {id: $scope.formId}, true)[0];
+            categoryService.updateCategory($scope.categoryFormId,$scope.categoryFormData).success(function(data) {
+                var category = $filter('filter')($scope.categories, {id: $scope.categoryFormId}, true)[0];
                 category.title = data.title;
                 $('#category-form-modal').modal('hide');
             });
@@ -188,15 +189,15 @@ app.controller('bodyController', ['$scope','$timeout','$filter','$document','ite
     };
 
     $scope.showDeleteCategoryForm = function(categoryId) {
-        $scope.formType = 'category';
-        $scope.formId = categoryId;
+        $scope.deleteFormType = 'category';
+        $scope.deleteFormId = categoryId;
 
         $('#delete-form-modal').modal('show');
     };
 
     $scope.submitDeleteCategoryForm = function(isValid) {
-        categoryService.deleteCategory($scope.formId).success(function() {
-            var category = $filter('filter')($scope.categories, {id: $scope.formId}, true)[0];
+        categoryService.deleteCategory($scope.deleteFormId).success(function() {
+            var category = $filter('filter')($scope.categories, {id: $scope.deleteFormId}, true)[0];
             var index = $scope.categories.indexOf(category);
             if (index != -1) {
                 $scope.categories.splice(index, 1);
@@ -208,22 +209,22 @@ app.controller('bodyController', ['$scope','$timeout','$filter','$document','ite
     // feed form
 
     $scope.showCreateFeedForm = function() {
-        $scope.form.$setPristine();
-        $scope.formSubmitted = false;
+        $scope.feedForm.$setPristine();
+        $scope.feedFormSubmitted = false;
 
-        $scope.formId = false;
-        $scope.formData = {};
+        $scope.feedFormId = false;
+        $scope.feedFormData = {};
 
         $('#feed-form-modal').modal('show');
     };
 
     $scope.submitCreateFeedForm = function(isValid) {
-        $scope.formSubmitted = true;
+        $scope.feedFormSubmitted = true;
         if (isValid) {
-            var categoryId = parseInt($scope.formData.categoryId);
+            var categoryId = parseInt($scope.feedFormData.categoryId);
             var category = $filter('filter')($scope.categories, {id: categoryId}, true)[0];
 
-            feedService.createFeed($scope.formData).success(function(data) {
+            feedService.createFeed($scope.feedFormData).success(function(data) {
                 category.feeds.push(data);
                 $('#feed-form-modal').modal('hide');
             });
@@ -231,15 +232,15 @@ app.controller('bodyController', ['$scope','$timeout','$filter','$document','ite
     };
 
     $scope.showUpdateFeedForm = function(categoryId,feedId) {
-        $scope.form.$setPristine();
-        $scope.formSubmitted = false;
+        $scope.feedForm.$setPristine();
+        $scope.feedFormSubmitted = false;
 
         var category = $filter('filter')($scope.categories, {id: categoryId}, true)[0];
         var feed = $filter('filter')(category.feeds, {id: feedId}, true)[0];
 
-        $scope.formId = feedId;
-        $scope.formCategoryId = categoryId;
-        $scope.formData = {
+        $scope.feedFormId = feedId;
+        $scope.feedFormCategory = category;
+        $scope.feedFormData = {
             'title':feed.title,
             'htmlUrl': feed.htmlUrl,
             'xmlUrl': feed.xmlUrl,
@@ -250,23 +251,22 @@ app.controller('bodyController', ['$scope','$timeout','$filter','$document','ite
     };
 
     $scope.submitUpdateFeedForm = function(isValid) {
-        $scope.formSubmitted = true;
+        $scope.feedFormSubmitted = true;
         if (isValid) {
-            var categoryId = parseInt($scope.formData.categoryId);
+            var categoryId = parseInt($scope.feedFormData.categoryId);
             var category = $filter('filter')($scope.categories, {id: categoryId}, true)[0];
 
-            feedService.updateFeed($scope.formId,$scope.formData).success(function(data) {
-                var feed = $filter('filter')(category.feeds, {id: $scope.formId}, true)[0];
+            feedService.updateFeed($scope.feedFormId,$scope.feedFormData).success(function(data) {
+                var feed = $filter('filter')(category.feeds, {id: $scope.feedFormId}, true)[0];
                 if (typeof feed === 'undefined') {
                     // we switched categories
                     category.feeds.push(data);
 
                     // get rid of the old feed
-                    var oldCategory = $filter('filter')($scope.categories, {id: $scope.formCategoryId}, true)[0];
-                    var oldFeed = $filter('filter')(oldCategory.feeds, {id: $scope.formId}, true)[0];
-                    var index = oldCategory.feeds.indexOf(oldFeed);
+                    var feed = $filter('filter')($scope.feedFormCategory.feeds, {id: $scope.feedFormId}, true)[0];
+                    var index = $scope.feedFormCategory.feeds.indexOf(feed);
                     if (index != -1) {
-                        oldCategory.feeds.splice(index, 1);
+                        $scope.feedFormCategory.feeds.splice(index, 1);
                     }
                 } else {
                     feed.title = data.title;
@@ -279,20 +279,18 @@ app.controller('bodyController', ['$scope','$timeout','$filter','$document','ite
     };
 
     $scope.showDeleteFeedForm = function(categoryId,feedId) {
-        $scope.formType = 'feed';
-        $scope.formId = feedId;
-        $scope.formCategoryId = categoryId;
+        $scope.deleteFormType = 'feed';
+        $scope.deleteFormId = feedId;
+        $scope.deleteFormCategory = $filter('filter')($scope.categories, {id: categoryId}, true)[0];
         $('#delete-form-modal').modal('show');
     };
 
     $scope.submitDeleteFeedForm = function(isValid) {
-        feedService.deleteFeed($scope.formId).success(function() {
-            var category = $filter('filter')($scope.categories, {id: $scope.formCategoryId}, true)[0];
-            var feed = $filter('filter')(category.feeds, {id: $scope.formId}, true)[0];
-
-            var index = category.feeds.indexOf(feed);
+        feedService.deleteFeed($scope.deleteFormId).success(function() {
+            var feed = $filter('filter')($scope.deleteFormCategory.feeds, {id: $scope.deleteFormId}, true)[0];
+            var index = $scope.deleteFormCategory.feeds.indexOf(feed);
             if (index != -1) {
-                category.feeds.splice(index, 1);
+                $scope.deleteFormCategory.feeds.splice(index, 1);
             }
             $('#delete-form-modal').modal('hide');
         });
