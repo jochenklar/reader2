@@ -148,7 +148,7 @@ app.controller('bodyController', ['$scope','$timeout','$filter','$document','ite
         $scope.formSubmitted = false;
 
         $scope.formId = false;
-        $scope.formData = {}
+        $scope.formData = {};
 
         $('#category-form-modal').modal('show');
     };
@@ -212,13 +212,13 @@ app.controller('bodyController', ['$scope','$timeout','$filter','$document','ite
         $scope.formSubmitted = false;
 
         $scope.formId = false;
-        $scope.formData = {}
+        $scope.formData = {};
 
         $('#feed-form-modal').modal('show');
     };
 
     $scope.submitCreateFeedForm = function(isValid) {
-        $scope.feedFormSubmitted = true;
+        $scope.formSubmitted = true;
         if (isValid) {
             var categoryId = parseInt($scope.formData.categoryId);
             var category = $filter('filter')($scope.categories, {id: categoryId}, true)[0];
@@ -250,7 +250,7 @@ app.controller('bodyController', ['$scope','$timeout','$filter','$document','ite
     };
 
     $scope.submitUpdateFeedForm = function(isValid) {
-        $scope.feedFormSubmitted = true;
+        $scope.formSubmitted = true;
         if (isValid) {
             var categoryId = parseInt($scope.formData.categoryId);
             var category = $filter('filter')($scope.categories, {id: categoryId}, true)[0];

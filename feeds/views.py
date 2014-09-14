@@ -11,7 +11,7 @@ class FeedViewSet(viewsets.ModelViewSet):
     serializer_class = FeedSerializer
 
     queryset = Feed.objects.all()
-    
+
 
 class CategoryViewSet(viewsets.ModelViewSet):
     authentication_classes = (SessionAuthentication,)
