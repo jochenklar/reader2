@@ -55,7 +55,7 @@ app.controller('bodyController', ['$scope','$timeout','$filter','$document','ite
 
     $scope.canScroll = false;
 
-    $scope.editable = true;
+    $scope.editable = false;
 
     $scope.firstItem = function() {
         $scope.setActiveItem(0);
@@ -131,12 +131,12 @@ app.controller('bodyController', ['$scope','$timeout','$filter','$document','ite
         $scope.categories = data;
     });
     
-    // itemService.getItems({
-    //     'page_size': 30
-    // }).success(function(data) {
-    //     $scope.items = data.results;
-    //     $scope.canScroll = true;
-    // });
+    itemService.getItems({
+        'page_size': 30
+    }).success(function(data) {
+        $scope.items = data.results;
+        $scope.canScroll = true;
+    });
 
     // category form
 
