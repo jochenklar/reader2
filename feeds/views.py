@@ -1,17 +1,9 @@
-from rest_framework import viewsets, generics
+from rest_framework import viewsets
 from rest_framework.authentication import SessionAuthentication
 from rest_framework.permissions import IsAuthenticated
 
 from feeds.models import *
 from feeds.serializers import *
-
-class FeedViewSet(viewsets.ModelViewSet):
-    authentication_classes = (SessionAuthentication,)
-    permission_classes = (IsAuthenticated,)
-    serializer_class = FeedSerializer
-
-    queryset = Feed.objects.all()
-
 
 class CategoryViewSet(viewsets.ModelViewSet):
     authentication_classes = (SessionAuthentication,)
@@ -20,6 +12,14 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return Category.objects.filter(user=self.request.user)
+
+class SubscriptionViewSet(viewsets.ModelViewSet):
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = (IsAuthenticated,)
+    serializer_class = SubscriptionSerializer
+
+    def get_queryset(self):
+        return Subscription.objects.filter(category__user=self.request.user)
 
 class ItemViewSet(viewsets.ModelViewSet):
     authentication_classes = (SessionAuthentication,)

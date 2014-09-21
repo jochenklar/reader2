@@ -29,28 +29,25 @@ app.factory('categoryService', ['$http', function($http) {
         },
         deleteCategory: function(id, data) {
             return $http.delete('api/categories/' + id + '/', data);
-        },
-        addFeed: function(id,feedId) {
-            return $http.patch('api/categories/' + id + '/', {'feedId': feedId});
         }
     };
 }]);
 
-app.factory('feedService', ['$http', function($http) {
+app.factory('subscriptionService', ['$http', function($http) {
     return {
-        createFeed: function (data) {
-            return $http.post('api/feeds/', data);
+        createSubscription: function (data) {
+            return $http.post('api/subscriptions/', data);
         },
-        updateFeed: function (id, data) {
-            return $http.put('api/feeds/' + id + '/', data);
+        updateSubscription: function (id, data) {
+            return $http.put('api/subscriptions/' + id + '/', data);
         },
-        deleteFeed: function (id, data) {
-            return $http.delete('api/feeds/' + id + '/', data);
+        deleteSubscription: function (id, data) {
+            return $http.delete('api/subscriptions/' + id + '/', data);
         },
     };
 }]);
 
-app.controller('bodyController', ['$scope','$timeout','$filter','$document','itemService','categoryService','feedService', function($scope,$timeout,$filter,$document,itemService,categoryService,feedService) {
+app.controller('bodyController', ['$scope','$timeout','$filter','$document','itemService','categoryService','subscriptionService', function($scope,$timeout,$filter,$document,itemService,categoryService,subscriptionService) {
 
     $scope.activeFeed = -1;
 
@@ -134,12 +131,12 @@ app.controller('bodyController', ['$scope','$timeout','$filter','$document','ite
         $scope.categories = data;
     });
     
-    itemService.getItems({
-        'page_size': 30
-    }).success(function(data) {
-        $scope.items = data.results;
-        $scope.canScroll = true;
-    });
+    // itemService.getItems({
+    //     'page_size': 30
+    // }).success(function(data) {
+    //     $scope.items = data.results;
+    //     $scope.canScroll = true;
+    // });
 
     // category form
 
@@ -147,7 +144,7 @@ app.controller('bodyController', ['$scope','$timeout','$filter','$document','ite
         $scope.categoryForm.$setPristine();
         $scope.categoryFormSubmitted = false;
 
-        $scope.categoryFormId = false;
+        $scope.categoryFormItem = false;
         $scope.categoryFormData = {};
 
         $('#category-form-modal').modal('show');
@@ -164,12 +161,11 @@ app.controller('bodyController', ['$scope','$timeout','$filter','$document','ite
         }
     };
 
-    $scope.showUpdateCategoryForm = function(categoryId) {
+    $scope.showUpdateCategoryForm = function(category) {
         $scope.categoryForm.$setPristine();
         $scope.categoryFormSubmitted = false;
 
-        var category = $filter('filter')($scope.categories, {id: categoryId}, true)[0];
-        $scope.categoryFormId = category.id;
+        $scope.categoryFormItem = category;
         $scope.categoryFormData = {
             'title': category.title
         };
@@ -180,25 +176,23 @@ app.controller('bodyController', ['$scope','$timeout','$filter','$document','ite
     $scope.submitUpdateCategoryForm = function(isValid) {
         $scope.categoryFormSubmitted = true;
         if (isValid) {
-            categoryService.updateCategory($scope.categoryFormId,$scope.categoryFormData).success(function(data) {
-                var category = $filter('filter')($scope.categories, {id: $scope.categoryFormId}, true)[0];
-                category.title = data.title;
+            categoryService.updateCategory($scope.categoryFormItem.id,$scope.categoryFormData).success(function(data) {
+                $scope.categoryFormItem.title = data.title;
                 $('#category-form-modal').modal('hide');
             });
         }
     };
 
-    $scope.showDeleteCategoryForm = function(categoryId) {
+    $scope.showDeleteCategoryForm = function(category) {
         $scope.deleteFormType = 'category';
-        $scope.deleteFormId = categoryId;
+        $scope.deleteFormItem = category;
 
         $('#delete-form-modal').modal('show');
     };
 
     $scope.submitDeleteCategoryForm = function(isValid) {
-        categoryService.deleteCategory($scope.deleteFormId).success(function() {
-            var category = $filter('filter')($scope.categories, {id: $scope.deleteFormId}, true)[0];
-            var index = $scope.categories.indexOf(category);
+        categoryService.deleteCategory($scope.deleteFormItem.id).success(function() {
+            var index = $scope.categories.indexOf($scope.deleteFormItem);
             if (index != -1) {
                 $scope.categories.splice(index, 1);
             }
@@ -206,89 +200,83 @@ app.controller('bodyController', ['$scope','$timeout','$filter','$document','ite
         });
     };
 
-    // feed form
+    // subscription form
 
-    $scope.showCreateFeedForm = function() {
-        $scope.feedForm.$setPristine();
-        $scope.feedFormSubmitted = false;
+    $scope.showCreateSubscriptionForm = function() {
+        $scope.subscriptionForm.$setPristine();
+        $scope.subscriptionFormSubmitted = false;
 
-        $scope.feedFormId = false;
-        $scope.feedFormData = {};
+        $scope.subscriptionFormItem = false;
+        $scope.subscriptionFormData = {};
 
-        $('#feed-form-modal').modal('show');
+        $('#subscription-form-modal').modal('show');
     };
 
-    $scope.submitCreateFeedForm = function(isValid) {
-        $scope.feedFormSubmitted = true;
+    $scope.submitCreateSubscriptionForm = function(isValid) {
+        $scope.subscriptionFormSubmitted = true;
         if (isValid) {
-            var categoryId = parseInt($scope.feedFormData.categoryId);
+            var categoryId = parseInt($scope.subscriptionFormData.categoryId);
             var category = $filter('filter')($scope.categories, {id: categoryId}, true)[0];
 
-            feedService.createFeed($scope.feedFormData).success(function(data) {
-                category.feeds.push(data);
-                $('#feed-form-modal').modal('hide');
+            subscriptionService.createSubscription($scope.subscriptionFormData).success(function(data) {
+                category.subscriptions.push(data);
+                $('#subscription-form-modal').modal('hide');
             });
         }
     };
 
-    $scope.showUpdateFeedForm = function(categoryId,feedId) {
-        $scope.feedForm.$setPristine();
-        $scope.feedFormSubmitted = false;
+    $scope.showUpdateSubscriptionForm = function(subscription) {
+        $scope.subscriptionForm.$setPristine();
+        $scope.subscriptionFormSubmitted = false;
 
-        var category = $filter('filter')($scope.categories, {id: categoryId}, true)[0];
-        var feed = $filter('filter')(category.feeds, {id: feedId}, true)[0];
-
-        $scope.feedFormId = feedId;
-        $scope.feedFormCategory = category;
-        $scope.feedFormData = {
-            'categoryId': categoryId,
-            'xmlUrl': feed.xmlUrl
+        $scope.subscriptionFormItem = subscription;
+        $scope.subscriptionFormData = {
+            'categoryId': subscription.category.id,
+            'xmlUrl': subscription.feed.xmlUrl
         };
 
-        $('#feed-form-modal').modal('show');
+        $('#subscription-form-modal').modal('show');
     };
 
-    $scope.submitUpdateFeedForm = function(isValid) {
+    $scope.submitUpdateSubscriptionForm = function(isValid) {
         $scope.feedFormSubmitted = true;
+
         if (isValid) {
-            var categoryId = parseInt($scope.feedFormData.categoryId);
-            var category = $filter('filter')($scope.categories, {id: categoryId}, true)[0];
+            subscriptionService.updateSubscription($scope.subscriptionFormItem.id,$scope.subscriptionFormData).success(function(data) {
 
-            feedService.updateFeed($scope.feedFormId,$scope.feedFormData).success(function(data) {
-                var feed = $filter('filter')(category.feeds, {id: $scope.feedFormId}, true)[0];
-                if (typeof feed === 'undefined') {
-                    // we switched categories
-                    category.feeds.push(data);
-
-                    // get rid of the old feed
-                    var feed = $filter('filter')($scope.feedFormCategory.feeds, {id: $scope.feedFormId}, true)[0];
-                    var index = $scope.feedFormCategory.feeds.indexOf(feed);
+                // see if we switched categories
+                if (data.category.id != $scope.subscriptionFormItem.category.id) {
+                    // remove subscription from the old category
+                    var oldCategory = $filter('filter')($scope.categories, {id: $scope.subscriptionFormItem.category.id}, true)[0];
+                    var index = oldCategory.subscriptions.indexOf($scope.subscriptionFormItem);
                     if (index != -1) {
-                        $scope.feedFormCategory.feeds.splice(index, 1);
+                        oldCategory.subscriptions.splice(index, 1);
                     }
+
+                    var newCategory = $filter('filter')($scope.categories, {id: data.category.id}, true)[0];
+                    newCategory.subscriptions.push(data);
                 } else {
-                    feed.title = data.title;
-                    feed.htmlUrl = data.htmlUrl;
-                    feed.xmlUrl = data.xmlUrl;
+                    $scope.subscriptionFormItem.feed = data.feed;
                 }
-                $('#feed-form-modal').modal('hide');
+
+                $('#subscription-form-modal').modal('hide');
             });
         }
     };
 
-    $scope.showDeleteFeedForm = function(categoryId,feedId) {
-        $scope.deleteFormType = 'feed';
-        $scope.deleteFormId = feedId;
-        $scope.deleteFormCategory = $filter('filter')($scope.categories, {id: categoryId}, true)[0];
+    $scope.showDeleteSubscriptionForm = function(subscription) {
+        $scope.deleteFormType = 'subscription';
+        $scope.deleteFormItem = subscription;
         $('#delete-form-modal').modal('show');
     };
 
-    $scope.submitDeleteFeedForm = function(isValid) {
-        feedService.deleteFeed($scope.deleteFormId).success(function() {
-            var feed = $filter('filter')($scope.deleteFormCategory.feeds, {id: $scope.deleteFormId}, true)[0];
-            var index = $scope.deleteFormCategory.feeds.indexOf(feed);
+    $scope.submitDeleteSubscriptionForm = function(isValid) {
+        subscriptionService.deleteSubscription($scope.deleteFormItem.id).success(function() {
+            // remove subscription from the old category
+            var category = $filter('filter')($scope.categories, {id: $scope.deleteFormItem.category.id}, true)[0];
+            var index = category.subscriptions.indexOf($scope.deleteFormItem);
             if (index != -1) {
-                $scope.deleteFormCategory.feeds.splice(index, 1);
+                category.subscriptions.splice(index, 1);
             }
             $('#delete-form-modal').modal('hide');
         });

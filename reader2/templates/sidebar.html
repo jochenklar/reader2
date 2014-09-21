@@ -24,10 +24,10 @@
         <ul class="categories">
             {% verbatim %}
             <li ng-repeat="category in categories | orderBy:'title'">
-                <a href="" class="pull-right" ng-show="editable" ng-click="showDeleteCategoryForm(category.id)">
+                <a href="" class="pull-right" ng-show="editable" ng-click="showDeleteCategoryForm(category)">
                     <div class="glyphicon glyphicon-remove"></div>
                 </a>
-                <a href="" class="pull-right" ng-show="editable" ng-click="showUpdateCategoryForm(category.id)">
+                <a href="" class="pull-right" ng-show="editable" ng-click="showUpdateCategoryForm(category)">
                     <div class="glyphicon glyphicon-pencil"></div>
                 </a>
                 <a href="" ng-click="category.isActive = !category.isActive">
@@ -37,15 +37,15 @@
                 </a>
 
                 <ul ng-show="category.isActive">
-                    <li ng-repeat="feed in category.feeds | orderBy:'title'">
-                        <a href="" class="pull-right" ng-show="editable" ng-click="showDeleteFeedForm(category.id,feed.id)">
+                    <li ng-repeat="subscription in category.subscriptions | orderBy:'feed.title'">
+                        <a href="" class="pull-right" ng-show="editable" ng-click="showDeleteSubscriptionForm(subscription)">
                             <div class="glyphicon glyphicon-remove"></div>
                         </a>
-                        <a href="" class="pull-right" ng-show="editable" ng-click="showUpdateFeedForm(category.id,feed.id)">
+                        <a href="" class="pull-right" ng-show="editable" ng-click="showUpdateSubscriptionForm(subscription)">
                             <div class="glyphicon glyphicon-pencil"></div>
                         </a>
-                        <a href="" ng-click="setActiveFeed(feed.id);">
-                            <div class="feed">&ndash; {{feed.title}}</div>
+                        <a href="" ng-click="setActiveFeed(subscription.feed.id);">
+                            <div class="feed">&ndash; {{subscription.feed.title}}</div>
                         </a>
                     </li>
                 </ul>
@@ -57,7 +57,7 @@
     <div class="options">
         <ul>
             <li><a href="" ng-show="editable" ng-click="showCreateCategoryForm()">Add new category</a></li>
-            <li><a href="" ng-show="editable" ng-click="showCreateFeedForm()">Add new feed</a></li>
+            <li><a href="" ng-show="editable" ng-click="showCreateSubscriptionForm()">Add new subscription</a></li>
         </ul>
     </div>
 </div>

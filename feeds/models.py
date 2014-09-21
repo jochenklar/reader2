@@ -27,16 +27,21 @@ class Meta(SingletonModel):
         verbose_name_plural = 'Meta'
 
 class Category(models.Model):
-    user      = models.ForeignKey(User)
-
-    title     = models.SlugField(max_length=1024)
-    feeds     = models.ManyToManyField('Feed', related_name='categories',blank=True)
+    user          = models.ForeignKey(User)
+    title         = models.SlugField(max_length=1024)
 
     def __unicode__(self):
         return '[' + self.user.username + '] ' + self.title
 
     class Meta:
         ordering = ['title']
+
+class Subscription(models.Model):
+    category  = models.ForeignKey('Category', related_name='subscriptions')
+    feed      = models.ForeignKey('Feed', related_name='subscriptions')
+
+    def __unicode__(self):
+        return '[' + self.category.user.username + ', ' + self.category.title + '] ' + self.feed.title
 
 class Item(models.Model):
     visitedBy = models.ManyToManyField(User, default=None)
@@ -57,8 +62,6 @@ class Item(models.Model):
         ordering = ['-published']
 
 class Feed(models.Model):
-    users     = models.ManyToManyField(User, related_name='feeds')
-
     title     = models.CharField(max_length=1024,blank=True)
     htmlUrl   = models.URLField(max_length=1024,blank=True)
     xmlUrl    = models.URLField(max_length=1024)
@@ -79,7 +82,7 @@ class Feed(models.Model):
         try:
             request = urllib2.Request(self.xmlUrl)
             response = urllib2.urlopen(request)
-        except urllib2.HTTPError as e:
+        except urllib2.HTTPError:
             return
 
         # check status code

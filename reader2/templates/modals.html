@@ -25,10 +25,10 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" ng-show="!categoryFormId" ng-click="submitCreateCategoryForm(categoryForm.$valid)">
+                <button type="button" class="btn btn-primary" ng-show="!categoryFormItem" ng-click="submitCreateCategoryForm(categoryForm.$valid)">
                     Add new category
                 </button>
-                <button type="button" class="btn btn-primary" ng-show="categoryFormId" ng-click="submitUpdateCategoryForm(categoryForm.$valid)">
+                <button type="button" class="btn btn-primary" ng-show="categoryFormItem" ng-click="submitUpdateCategoryForm(categoryForm.$valid)">
                     Update category
                 </button>
             </div>
@@ -37,7 +37,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="feed-form-modal" tabindex="-1" role="dialog" aria-labelledby="feed-form-label" aria-hidden="true">
+<div class="modal fade" id="subscription-form-modal" tabindex="-1" role="dialog" aria-labelledby="subscription-form-label" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             {% verbatim %}
@@ -45,16 +45,16 @@
                 <button type="button" class="close" data-dismiss="modal">
                     <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
                 </button>
-                <h4 class="modal-title" id="feed-form-label">Add a new feed</h4>
+                <h4 class="modal-title" id="subscription-form-label">Add a new feed</h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" role="form" name="feedForm" novalidate>
-                    <div class="form-group" ng-class="{'has-error': feedForm.categoryId.$invalid && feedFormSubmitted}">
-                        <label for="input-feed-categoryId" class="col-sm-2 control-label">
+                <form class="form-horizontal" role="form" name="subscriptionForm" novalidate>
+                    <div class="form-group" ng-class="{'has-error': subscriptionForm.categoryId.$invalid && subscriptionFormSubmitted}">
+                        <label for="input-subscription-categoryId" class="col-sm-2 control-label">
                             Category
                         </label>
                         <div class="col-sm-10">
-                            <select class="form-control" id="input-feed-categoryId" name="categoryId" ng-model="feedFormData.categoryId" required>
+                            <select class="form-control" id="input-subscription-categoryId" name="categoryId" ng-model="subscriptionFormData.categoryId" required>
                                 <option value="" disabled selected>Select category</option>
                                 <option ng-repeat="category in categories | orderBy:'title'" value="{{category.id}}">
                                     {{category.title}}
@@ -62,23 +62,23 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group" ng-class="{'has-error': feedForm.xmlUrl.$invalid && feedFormSubmitted}">
-                        <label for="input-feed-xmlUrl" class="col-sm-2 control-label">
+                    <div class="form-group" ng-class="{'has-error': subscriptionForm.xmlUrl.$invalid && subscriptionFormSubmitted}">
+                        <label for="input-subscription-xmlUrl" class="col-sm-2 control-label">
                             Feed URL
                         </label>
                         <div class="col-sm-10">
-                            <input type="url" class="form-control" id="input-feed-xmlUrl" name="xmlUrl" placeholder="Enter a valid URL for the rss feed" ng-model="feedFormData.xmlUrl" ng-maxlength="256" required />
+                            <input type="url" class="form-control" id="input-subscription-xmlUrl" name="xmlUrl" placeholder="Enter a valid URL for the rss feed" ng-model="subscriptionFormData.xmlUrl" ng-maxlength="256" required />
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" ng-show="!feedFormId" ng-click="submitCreateFeedForm(feedForm.$valid)">
-                    Add new feed
+                <button type="button" class="btn btn-primary" ng-show="!subscriptionFormItem" ng-click="submitCreateSubscriptionForm(subscriptionForm.$valid)">
+                    Add new subscription
                 </button>
-                <button type="button" class="btn btn-primary" ng-show="feedFormId" ng-click="submitUpdateFeedForm(feedForm.$valid)">
-                    Update feed</span>
+                <button type="button" class="btn btn-primary" ng-show="subscriptionFormItem" ng-click="submitUpdateSubscriptionForm(subscriptionForm.$valid)">
+                    Update subscription</span>
                 </button>
             </div>
             {% endverbatim %}
@@ -101,8 +101,8 @@
                 <button type="button" class="btn btn-danger" ng-show="deleteFormType == 'category'" ng-click="submitDeleteCategoryForm()">
                     Delete category
                 </button>
-                <button type="button" class="btn btn-danger" ng-show="deleteFormType == 'feed'" ng-click="submitDeleteFeedForm()">
-                    Delete feed
+                <button type="button" class="btn btn-danger" ng-show="deleteFormType == 'subscription'" ng-click="submitDeleteSubscriptionForm()">
+                    Delete subscription
                 </button>
             </div>
             {% endverbatim %}

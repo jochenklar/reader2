@@ -1,57 +1,6 @@
 from rest_framework import serializers
 from feeds.models import *
 
-class FeedSerializer(serializers.ModelSerializer):
-
-    def delete_object(self, obj):
-        print 'HALLO'
-
-    def save_object(self, obj, **kwargs):
-        user = self.context['request'].user
-
-        # append / to feed
-        if not obj.xmlUrl.endswith('/'):
-            obj.xmlUrl += '/'
-
-        # try to find the feed in the database
-        try:
-            old_obj = Feed.objects.get(xmlUrl=obj.xmlUrl)
-            obj.id = old_obj.id
-            obj.title = old_obj.title
-            obj.htmlUrl = old_obj.htmlUrl
-
-            # overide the model, will be forgotten at the end of scope
-            # the old obj will be returned to the client
-            obj = old_obj
-
-        except Feed.DoesNotExist:
-            obj.save()
-            obj.fetchItems()
-
-        if user not in obj.users.all():
-            obj.users.add(user)
-            obj.save()
-
-        if 'categoryId' in self.context['request'].DATA:
-            # look for the old cateory for this feed and user
-            rows = Category.objects.filter(user=user).filter(feeds__title=obj.title)
-            if rows:
-                obj.categories.remove(rows[0])
-                obj.save()
-
-            obj.categories.add(self.context['request'].DATA['categoryId'])
-
-
-        obj.save()
-
-        # save super machen
-
-    class Meta:
-        model = Feed
-        fields = ('id','title','htmlUrl','xmlUrl')
-        read_only_fields = ('id','title','htmlUrl')
-        depth = 1
-
 class CategorySerializer(serializers.ModelSerializer):
     def save_object(self, obj, **kwargs):
         obj.user = self.context['request'].user
@@ -59,8 +8,38 @@ class CategorySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Category
-        fields = ('id','title','feeds')
-        read_only_fields = ('id','feeds')
+        fields = ('id','title','subscriptions')
+        read_only_fields = ('id','subscriptions')
+        depth = 2
+
+class SubscriptionSerializer(serializers.ModelSerializer):
+    def save_object(self, obj, **kwargs):
+        if u'categoryId' in self.context['request'].DATA and u'xmlUrl' in self.context['request'].DATA:
+            category_id = self.context['request'].DATA['categoryId']
+            xmlUrl =  self.context['request'].DATA['xmlUrl']
+
+            # try to find the feed in the database
+            try:
+                feed = Feed.objects.get(xmlUrl=xmlUrl)
+                print 'X'
+            except Feed.DoesNotExist:
+                feed = Feed(xmlUrl=xmlUrl)
+                feed.save()
+                feed.fetchItems()
+
+            # connect the feed to this subscription
+            obj.feed = feed
+
+            # get the right category
+            category = Category.objects.get(id=category_id)
+            obj.category = category
+
+            obj.save()
+
+    class Meta:
+        model = Subscription
+        fields = ('id','category','feed')
+        read_only_fields = ('id','category','feed')
         depth = 1
 
 class ItemSerializer(serializers.ModelSerializer):

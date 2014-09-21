@@ -4,8 +4,11 @@ from feeds.models import *
 class CategoryAdmin(admin.ModelAdmin):
     ordering = ['id']
 
+class SubscriptionAdmin(admin.ModelAdmin):
+    ordering = ['id']
+
 class FeedAdmin(admin.ModelAdmin):
-    fields = ('title','htmlUrl','xmlUrl','users')
+    fields = ('title','htmlUrl','xmlUrl')
     ordering = ['id']
 
 class ItemAdmin(admin.ModelAdmin):
@@ -13,5 +16,6 @@ class ItemAdmin(admin.ModelAdmin):
 
 admin.site.register(Meta)
 admin.site.register(Category, CategoryAdmin)
+admin.site.register(Subscription, SubscriptionAdmin)
 admin.site.register(Feed, FeedAdmin)
 admin.site.register(Item, ItemAdmin)
