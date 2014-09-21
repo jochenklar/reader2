@@ -2,12 +2,35 @@ from rest_framework import serializers
 from feeds.models import *
 
 class FeedSerializer(serializers.ModelSerializer):
+
+    def delete_object(self, obj):
+        print 'HALLO'
+
     def save_object(self, obj, **kwargs):
         user = self.context['request'].user
 
-        if obj.id == None:
+        # append / to feed
+        if not obj.xmlUrl.endswith('/'):
+            obj.xmlUrl += '/'
+
+        # try to find the feed in the database
+        try:
+            old_obj = Feed.objects.get(xmlUrl=obj.xmlUrl)
+            obj.id = old_obj.id
+            obj.title = old_obj.title
+            obj.htmlUrl = old_obj.htmlUrl
+
+            # overide the model, will be forgotten at the end of scope
+            # the old obj will be returned to the client
+            obj = old_obj
+
+        except Feed.DoesNotExist:
             obj.save()
+            obj.fetchItems()
+
+        if user not in obj.users.all():
             obj.users.add(user)
+            obj.save()
 
         if 'categoryId' in self.context['request'].DATA:
             # look for the old cateory for this feed and user
@@ -18,12 +41,15 @@ class FeedSerializer(serializers.ModelSerializer):
 
             obj.categories.add(self.context['request'].DATA['categoryId'])
 
+
         obj.save()
+
+        # save super machen
 
     class Meta:
         model = Feed
-        fields = ('id','title', 'htmlUrl', 'xmlUrl')
-        read_only_fields = ('id',)
+        fields = ('id','title','htmlUrl','xmlUrl')
+        read_only_fields = ('id','title','htmlUrl')
         depth = 1
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -51,6 +77,6 @@ class ItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Item
-        fields = ('id','title', 'author', 'link', 'published', 'updated', 'content', 'feed', 'visited')
-        read_only_fields = ('id','title', 'author', 'link', 'published', 'updated', 'content', 'feed')
+        fields = ('id','title','author','link','published','updated','content','feed','visited')
+        read_only_fields = ('id','title','author','link','published','updated','content','feed')
         depth = 1

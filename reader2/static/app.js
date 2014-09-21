@@ -241,10 +241,8 @@ app.controller('bodyController', ['$scope','$timeout','$filter','$document','ite
         $scope.feedFormId = feedId;
         $scope.feedFormCategory = category;
         $scope.feedFormData = {
-            'title':feed.title,
-            'htmlUrl': feed.htmlUrl,
-            'xmlUrl': feed.xmlUrl,
-            'categoryId': categoryId
+            'categoryId': categoryId,
+            'xmlUrl': feed.xmlUrl
         };
 
         $('#feed-form-modal').modal('show');
