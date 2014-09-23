@@ -30,10 +30,10 @@
 
     <div class="container" id="content">
         <div class="row">
-            <div class="col-sm-3 hidden-xs">
+            <div class="col-sm-3" ng-class="{'hidden-xs': !sidebarVisible}">
                 {% include 'sidebar.html' %}
             </div>
-            <div class="col-sm-9">
+            <div class="col-sm-9" ng-class="{'hidden-xs': sidebarVisible}">
                 {% include 'items.html' %}
             </div>
         </div>

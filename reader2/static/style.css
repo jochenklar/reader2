@@ -42,12 +42,22 @@ blockquote {
         position: relative;
     }
     #content {
-        margin-top: 10px;
+        margin-top: -10px;
     }
 }
 
 /* navigation */
-
+.navbar-nav  {
+    float: left;
+    margin: 0;
+}
+.navbar-nav > li {
+    float: left;
+}
+.navbar-nav > li > a {
+    padding-top: 15px;
+    padding-bottom: 15px;
+}
 nav.navbar-fixed-top {
     background-color: #08c;
 }
@@ -56,12 +66,6 @@ nav.navbar-fixed-top a:focus,
 nav.navbar-fixed-top a:visited,
 nav.navbar-fixed-top a:hover {
     color: #fff !important;
-}
-nav.navbar-fixed-bottom button.btn-navbar {
-    width: 70px;
-    margin-top: 8px;
-    margin-bottom: 8px;
-    margin-left: 15px;
 }
 
 /* sidebar */

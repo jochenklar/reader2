@@ -57,6 +57,12 @@ app.controller('bodyController', ['$scope','$timeout','$filter','$document','ite
 
     $scope.editable = false;
 
+    $scope.sidebarVisible = false;
+
+    $scope.toogleSidebar = function() {
+        $scope.sidebarVisible = !$scope.sidebarVisible;
+    };
+
     $scope.firstItem = function() {
         $scope.setActiveItem(0);
     };

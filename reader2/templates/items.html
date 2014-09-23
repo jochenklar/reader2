@@ -3,10 +3,7 @@
 
 <div id="items">
     <div infinite-scroll="loadMoreItems()" infinite-scroll-distance="0.2">
-        <h4>
-            <span class="hidden-xs">Items</span>
-            <span class="visible-xs">reader</span>
-        </h4>
+        <h4>Items</h4>
         {% verbatim %}
         <div id="item-{{i}}" class="item {{activeItem == i ? 'active' : ''}}" ng-repeat="(i,item) in items  | orderBy:'-published'">
             <div class="head" ng-click="thisItem(i);">
