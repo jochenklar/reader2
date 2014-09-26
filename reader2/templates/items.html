@@ -8,7 +8,7 @@
         <div id="item-{{i}}" class="item {{activeItem == i ? 'active' : ''}}" ng-repeat="(i,item) in items  | orderBy:'-published'">
             <div class="head" ng-click="thisItem(i);">
                 <h2 class="{{item.visited ? 'visited' : ''}}">{{item.title}}</h2>
-                <span class="meta">{{item.feed.title}}, {{item.published}}</span>
+                <span class="meta">{{item.feed.title}}, {{item.published | date:'MMM d, y'}}</span>
             </div>
             <div class="body" ng-show="activeItem == i">
                 <p>
