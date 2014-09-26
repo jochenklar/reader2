@@ -1,5 +1,8 @@
+from django.http import HttpResponseBadRequest
 from rest_framework import serializers
+from rest_framework.exceptions import ParseError
 from feeds.models import *
+from feeds.exceptions import FeedException
 
 class CategorySerializer(serializers.ModelSerializer):
     def save_object(self, obj, **kwargs):
@@ -25,7 +28,12 @@ class SubscriptionSerializer(serializers.ModelSerializer):
             except Feed.DoesNotExist:
                 feed = Feed(xmlUrl=xmlUrl)
                 feed.save()
-                feed.fetchItems()
+            
+                try:
+                    feed.fetchItems()
+                except FeedException:
+                    feed.delete()
+                    raise ParseError()
 
             # connect the feed to this subscription
             obj.feed = feed

@@ -4,6 +4,8 @@ from django.db import models
 from django.utils.timezone import utc
 from django.contrib.auth.models import User
 
+from feeds.exceptions import FeedException
+
 # this is a singleton model
 class SingletonModel(models.Model):
     class Meta:
@@ -83,7 +85,7 @@ class Feed(models.Model):
             request = urllib2.Request(self.xmlUrl)
             response = urllib2.urlopen(request)
         except (urllib2.HTTPError,urllib2.URLError,socket.error):
-            return
+            raise FeedException(self.xmlUrl)
 
         # check status code
         if response.getcode() != 200: return
@@ -94,10 +96,14 @@ class Feed(models.Model):
         if 'title' in rss['feed']:
             self.title = rss['feed']['title']
             self.save()
+        else:
+            raise FeedException(self.xmlUrl)
 
         if 'link' in rss['feed']:
             self.htmlUrl = rss['feed']['link']
             self.save()
+        else:
+            raise FeedException(self.xmlUrl)
 
         timestamp = None
 
@@ -108,7 +114,6 @@ class Feed(models.Model):
             timestamp = t(rss['feed']['lastBuildDate'])
 
         if timestamp and self.updated and timestamp < self.updated: return
-
 
         for entry in rss['entries']:
             # get guid
