@@ -1,4 +1,4 @@
-import time,datetime,feedparser,urllib2
+import time,datetime,feedparser,urllib2,socket
 
 from django.db import models
 from django.utils.timezone import utc
@@ -82,7 +82,7 @@ class Feed(models.Model):
         try:
             request = urllib2.Request(self.xmlUrl)
             response = urllib2.urlopen(request)
-        except urllib2.HTTPError:
+        except (urllib2.HTTPError,urllib2.URLError,socket.error):
             return
 
         # check status code
@@ -99,13 +99,16 @@ class Feed(models.Model):
             self.htmlUrl = rss['feed']['link']
             self.save()
 
+        timestamp = None
+
         if 'updated_parsed' in rss['feed']:
             timestamp = t(rss['feed']['updated_parsed'])
 
         if 'lastBuildDate' in rss['feed']:
             timestamp = t(rss['feed']['lastBuildDate'])
 
-        if self.updated and timestamp < self.updated: return
+        if timestamp and self.updated and timestamp < self.updated: return
+
 
         for entry in rss['entries']:
             # get guid

@@ -1,3 +1,5 @@
+import datetime
+from django.utils.timezone import utc
 from django.core.management.base import BaseCommand, CommandError
 from feeds.models import Feed,Meta
 

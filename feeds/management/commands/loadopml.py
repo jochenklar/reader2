@@ -38,9 +38,9 @@ class Command(BaseCommand):
                 print '        subscription',subscriptionTitle
 
                 try:
-                    feed = Feed.objects.get(xmlUrl=subscriptionHtmlUrl)
+                    feed = Feed.objects.get(xmlUrl=subscriptionXmlUrl)
                 except Feed.DoesNotExist:
-                    feed = Feed(xmlUrl=subscriptionHtmlUrl)
+                    feed = Feed(xmlUrl=subscriptionXmlUrl)
                     feed.fetchItems()
                     feed.save()
 
