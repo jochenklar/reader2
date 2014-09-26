@@ -42,6 +42,11 @@ class Subscription(models.Model):
     category  = models.ForeignKey('Category', related_name='subscriptions')
     feed      = models.ForeignKey('Feed', related_name='subscriptions')
 
+    def delete(self):
+        if self.feed.subscriptions.count() <= 1:
+            self.feed.delete()
+        super(Subscription, self).delete()
+
     def __unicode__(self):
         return '[' + self.category.user.username + ', ' + self.category.title + '] ' + self.feed.title
 

@@ -30,7 +30,7 @@ class ItemViewSet(viewsets.ModelViewSet):
     paginate_by_param = 'page_size'
 
     def get_queryset(self):
-        queryset = Item.objects.filter(feed__subscriptions__category__user=self.request.user)
+        queryset = Item.objects.filter(feed__subscriptions__category__user=self.request.user).distinct()
 
         feed = self.request.QUERY_PARAMS.get('feed', '-1')
         if feed != '-1':
