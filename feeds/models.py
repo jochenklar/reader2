@@ -176,6 +176,9 @@ class Feed(models.Model):
             elif 'description' in entry:
                 item.content = entry['description']
 
+            # look for relative links
+            item.content = item.content.replace('href="/','href="' + item.link + '/')
+
             # set corresponding feed model
             item.feed = self
 
