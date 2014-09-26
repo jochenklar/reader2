@@ -214,6 +214,7 @@ app.controller('bodyController', ['$scope','$timeout','$filter','$document','ite
 
         $scope.subscriptionFormItem = false;
         $scope.subscriptionFormData = {};
+        $scope.subscriptionFormError = false;
 
         $('#subscription-form-modal').modal('show');
     };
@@ -227,6 +228,8 @@ app.controller('bodyController', ['$scope','$timeout','$filter','$document','ite
             subscriptionService.createSubscription($scope.subscriptionFormData).success(function(data) {
                 category.subscriptions.push(data);
                 $('#subscription-form-modal').modal('hide');
+            }).error(function(data) {
+                $scope.subscriptionFormError = 'Feed not available.'
             });
         }
     };
@@ -240,6 +243,7 @@ app.controller('bodyController', ['$scope','$timeout','$filter','$document','ite
             'categoryId': subscription.category.id,
             'xmlUrl': subscription.feed.xmlUrl
         };
+        $scope.subscriptionFormError = false;
 
         $('#subscription-form-modal').modal('show');
     };
@@ -266,6 +270,8 @@ app.controller('bodyController', ['$scope','$timeout','$filter','$document','ite
                 }
 
                 $('#subscription-form-modal').modal('hide');
+            }).error(function(data) {
+                $scope.subscriptionFormError = 'Feed not available.'
             });
         }
     };
