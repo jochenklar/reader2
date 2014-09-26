@@ -15,6 +15,7 @@
     </div>
 </nav>
 
+{% if not login %}
 <nav class="navbar navbar-default navbar-fixed-bottom visible-xs" role="navigation">
     <div class="navbar-header">
         <ul class="nav navbar-nav">
@@ -29,5 +30,6 @@
         </ul>
     </div>
 </nav>
+{% endif %}
 
 <!-- end navigation -->
