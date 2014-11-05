@@ -118,18 +118,18 @@ app.controller('bodyController', ['$scope','$timeout','$filter','$document','ite
 
     $scope.loadMoreItems = function() {
         if ($scope.canScroll){
+            $scope.canScroll = false;
+
             var page = $scope.items.length / 5;
 
             itemService.getItems({
-                'page_size': 5,
-                'page': ($scope.items.length / 5) + 1,
+                'page_size': 10,
+                'page': ($scope.items.length / 10) + 1,
                 'feed': $scope.activeFeed
             }).success(function(data) {
                 $scope.items = $scope.items.concat(data.results);
-            }).error(function(data) {
-                // everything is here, disabling infinite scroll
-                $scope.canScroll = false;
-            });
+                $scope.canScroll = true;
+            })
         }
     };
 
