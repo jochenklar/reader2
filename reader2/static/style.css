@@ -48,6 +48,9 @@ blockquote {
 }
 
 /* navigation */
+nav {
+    height: 50px;
+}
 .navbar-nav  {
     float: left;
     margin: 0;
