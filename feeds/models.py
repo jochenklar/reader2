@@ -61,7 +61,7 @@ class Item(models.Model):
     guid      = models.CharField(max_length=1024)
     content   = models.TextField(blank=True)
     feed      = models.ForeignKey('Feed', related_name='items')
-    
+
     def __unicode__(self):
         return self.title
 

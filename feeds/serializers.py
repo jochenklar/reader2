@@ -24,11 +24,9 @@ class SubscriptionSerializer(serializers.ModelSerializer):
             # try to find the feed in the database
             try:
                 feed = Feed.objects.get(xmlUrl=xmlUrl)
-                print 'X'
             except Feed.DoesNotExist:
                 feed = Feed(xmlUrl=xmlUrl)
                 feed.save()
-            
                 try:
                     feed.fetchItems()
                 except FeedException:
