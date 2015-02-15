@@ -32,12 +32,12 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR,'static/')
+STATIC_ROOT = os.path.join(SITE_ROOT,'static/')
 
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR,'reader2/static/'),
+    os.path.join(SITE_ROOT,'reader2/static/'),
 )
 
 TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, 'reader2/templates/'),
+    os.path.join(SITE_ROOT, 'reader2/templates/'),
 )
