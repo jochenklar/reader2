@@ -5,6 +5,9 @@ app.config(['$httpProvider', function($httpProvider) {
     $httpProvider.defaults.xsrfHeaderName = 'X-CSRFToken';
 }]);
 
+// throttle/debounce the frequency of infinite-scroll events
+angular.module('infinite-scroll').value('THROTTLE_MILLISECONDS', 100);
+
 app.factory('itemService', ['$http', function($http) {
     return {
         getItems: function(params) {
