@@ -82,7 +82,7 @@ class Feed(models.Model):
 
     def fetchItems(self):
         # a function converts from feedparser to non-naive django datetime
-        def t(timestamp):
+        def parse_timestamp(timestamp):
             return datetime.datetime.fromtimestamp(time.mktime(timestamp)).replace(tzinfo=utc)
 
         # fetch feed from the internetz
@@ -112,11 +112,8 @@ class Feed(models.Model):
 
         timestamp = None
 
-        if 'updated_parsed' in rss['feed']:
-            timestamp = t(rss['feed']['updated_parsed'])
-
         if 'lastBuildDate' in rss['feed']:
-            timestamp = t(rss['feed']['lastBuildDate'])
+            timestamp = parse_timestamp(rss['feed']['lastBuildDate'])
 
         if timestamp and self.updated and timestamp < self.updated: return
 
@@ -133,7 +130,7 @@ class Feed(models.Model):
 
                 # set updated
                 if 'updated_parsed' in entry:
-                    item.updated = t(entry['updated_parsed'])
+                    item.updated = parse_timestamp(entry['updated_parsed'])
                 else:
                     item.updated = datetime.datetime.now().replace(tzinfo=utc)
 
@@ -146,9 +143,9 @@ class Feed(models.Model):
 
                 # set published
                 if 'updated_parsed' in entry:
-                    item.published = t(entry['updated_parsed'])
+                    item.published = parse_timestamp(entry['updated_parsed'])
                 elif 'published_parsed' in entry:
-                    item.published = t(entry['published_parsed'])
+                    item.published = parse_timestamp(entry['published_parsed'])
                 else:
                     item.published = datetime.datetime.now().replace(tzinfo=utc)
 
