@@ -1,7 +1,7 @@
 import time
 import datetime
 import feedparser
-import urllib2
+import requests
 import socket
 
 from django.db import models
@@ -97,17 +97,16 @@ class Feed(models.Model):
 
         # fetch feed from the internetz
         try:
-            request = urllib2.Request(self.xmlUrl)
-            response = urllib2.urlopen(request)
-        except (urllib2.HTTPError, urllib2.URLError, socket.error):
+            response = requests.get(self.xmlUrl)
+        except requests.exceptions.ConnectionError:
             raise FeedException(message='Could not fetch feed for %s' % self.xmlUrl)
 
         # check status code
-        if response.getcode() != 200:
-            return
+        if response.status_code != 200:
+            raise FeedException(message='Could not fetch feed for %s' % self.xmlUrl)
 
         # read and parse the feed
-        rss = feedparser.parse(response.read())
+        rss = feedparser.parse(response.content)
 
         try:
             self.title = rss['feed']['title']
