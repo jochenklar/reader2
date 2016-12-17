@@ -1,10 +1,15 @@
-import time,datetime,feedparser,urllib2,socket
+import time
+import datetime
+import feedparser
+import urllib2
+import socket
 
 from django.db import models
 from django.utils.timezone import utc
 from django.contrib.auth.models import User
 
 from feeds.exceptions import FeedException
+
 
 # this is a singleton model
 class SingletonModel(models.Model):
@@ -22,15 +27,17 @@ class SingletonModel(models.Model):
         except cls.DoesNotExist:
             return cls()
 
+
 class Meta(SingletonModel):
-    updated   = models.DateTimeField(null=True)
+    updated = models.DateTimeField(null=True)
 
     class Meta:
         verbose_name_plural = 'Meta'
 
+
 class Category(models.Model):
-    user          = models.ForeignKey(User)
-    title         = models.SlugField(max_length=1024)
+    user = models.ForeignKey(User)
+    title = models.SlugField(max_length=1024)
 
     def __unicode__(self):
         return '[' + self.user.username + '] ' + self.title
@@ -38,9 +45,10 @@ class Category(models.Model):
     class Meta:
         ordering = ['title']
 
+
 class Subscription(models.Model):
-    category  = models.ForeignKey('Category', related_name='subscriptions')
-    feed      = models.ForeignKey('Feed', related_name='subscriptions')
+    category = models.ForeignKey('Category', related_name='subscriptions')
+    feed = models.ForeignKey('Feed', related_name='subscriptions')
 
     def delete(self):
         if self.feed.subscriptions.count() <= 1:
@@ -50,17 +58,18 @@ class Subscription(models.Model):
     def __unicode__(self):
         return '[' + self.category.user.username + ', ' + self.category.title + '] ' + self.feed.title
 
+
 class Item(models.Model):
     visitedBy = models.ManyToManyField(User, default=None)
 
-    title     = models.CharField(max_length=1024)
-    author    = models.CharField(max_length=1024, blank=True)
-    link      = models.URLField(max_length=1024, blank=True)
+    title = models.CharField(max_length=1024)
+    author = models.CharField(max_length=1024, blank=True)
+    link = models.URLField(max_length=1024, blank=True)
     published = models.DateTimeField(null=True)
-    updated   = models.DateTimeField(null=True, blank=True)
-    guid      = models.CharField(max_length=1024)
-    content   = models.TextField(blank=True)
-    feed      = models.ForeignKey('Feed', related_name='items')
+    updated = models.DateTimeField(null=True, blank=True)
+    guid = models.CharField(max_length=1024)
+    content = models.TextField(blank=True)
+    feed = models.ForeignKey('Feed', related_name='items')
 
     def __unicode__(self):
         return self.title
@@ -68,11 +77,12 @@ class Item(models.Model):
     class Meta:
         ordering = ['-published']
 
+
 class Feed(models.Model):
-    title     = models.CharField(max_length=1024,blank=True)
-    htmlUrl   = models.URLField(max_length=1024,blank=True)
-    xmlUrl    = models.URLField(max_length=1024)
-    updated   = models.DateTimeField(null=True)
+    title = models.CharField(max_length=1024, blank=True)
+    htmlUrl = models.URLField(max_length=1024, blank=True)
+    xmlUrl = models.URLField(max_length=1024)
+    updated = models.DateTimeField(null=True)
 
     def __unicode__(self):
         return self.xmlUrl
@@ -89,33 +99,30 @@ class Feed(models.Model):
         try:
             request = urllib2.Request(self.xmlUrl)
             response = urllib2.urlopen(request)
-        except (urllib2.HTTPError,urllib2.URLError,socket.error):
-            raise FeedException(self.xmlUrl)
+        except (urllib2.HTTPError, urllib2.URLError, socket.error):
+            raise FeedException(message='Could not fetch feed for %s' % self.xmlUrl)
 
         # check status code
-        if response.getcode() != 200: return
+        if response.getcode() != 200:
+            return
 
         # read and parse the feed
         rss = feedparser.parse(response.read())
 
-        if 'title' in rss['feed']:
+        try:
             self.title = rss['feed']['title']
-            self.save()
-        else:
-            raise FeedException(self.xmlUrl)
-
-        if 'link' in rss['feed']:
             self.htmlUrl = rss['feed']['link']
             self.save()
-        else:
-            raise FeedException(self.xmlUrl)
+        except KeyError:
+            raise FeedException(message='Could not parse title/link for %s' % self.xmlUrl)
 
         timestamp = None
 
         if 'lastBuildDate' in rss['feed']:
             timestamp = parse_timestamp(rss['feed']['lastBuildDate'])
 
-        if timestamp and self.updated and timestamp < self.updated: return
+        if timestamp and self.updated and timestamp < self.updated:
+            return
 
         for entry in rss['entries']:
             # get guid
@@ -174,7 +181,7 @@ class Feed(models.Model):
                 item.content = entry['description']
 
             # look for relative links
-            item.content = item.content.replace('href="/','href="' + item.link + '/')
+            item.content = item.content.replace('href="/', 'href="' + item.link + '/')
 
             # set corresponding feed model
             item.feed = self
