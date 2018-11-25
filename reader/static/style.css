@@ -72,6 +72,10 @@ nav.navbar-fixed-top a:hover {
     color: #fff !important;
 }
 
+nav.navbar-fixed-bottom {
+    height: 90px;
+}
+
 /* sidebar */
 
 #sidebar .options {
