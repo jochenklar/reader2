@@ -1,11 +1,18 @@
-/reader2/local.py
+__pycache__/
+*.py[cod]
 
 *~
-*.pyc
+*-
+*.swp
 .DS_Store
 
-static/*
-!static/.gitkeep
+env*
 
-env
-env3
+build
+dist
+*.egg-info
+
+static_root/
+media_root/
+
+vendor/

@@ -2,7 +2,6 @@ import time
 import datetime
 import feedparser
 import requests
-import socket
 
 from django.db import models
 from django.utils.timezone import utc
@@ -36,10 +35,10 @@ class Meta(SingletonModel):
 
 
 class Category(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.SlugField(max_length=1024)
 
-    def __unicode__(self):
+    def __str__(self):
         return '[' + self.user.username + '] ' + self.title
 
     class Meta:
@@ -47,15 +46,15 @@ class Category(models.Model):
 
 
 class Subscription(models.Model):
-    category = models.ForeignKey('Category', related_name='subscriptions')
-    feed = models.ForeignKey('Feed', related_name='subscriptions')
+    category = models.ForeignKey('Category', related_name='subscriptions', on_delete=models.CASCADE)
+    feed = models.ForeignKey('Feed', related_name='subscriptions', on_delete=models.CASCADE)
 
     def delete(self):
         if self.feed.subscriptions.count() <= 1:
             self.feed.delete()
         super(Subscription, self).delete()
 
-    def __unicode__(self):
+    def __str__(self):
         return '[' + self.category.user.username + ', ' + self.category.title + '] ' + self.feed.title
 
 
@@ -69,9 +68,9 @@ class Item(models.Model):
     updated = models.DateTimeField(null=True, blank=True)
     guid = models.CharField(max_length=1024)
     content = models.TextField(blank=True)
-    feed = models.ForeignKey('Feed', related_name='items')
+    feed = models.ForeignKey('Feed', related_name='items', on_delete=models.CASCADE)
 
-    def __unicode__(self):
+    def __str__(self):
         return self.title
 
     class Meta:
@@ -84,8 +83,8 @@ class Feed(models.Model):
     xmlUrl = models.URLField(max_length=1024)
     updated = models.DateTimeField(null=True)
 
-    def __unicode__(self):
-        return self.xmlUrl
+    def __str__(self):
+        return self.title
 
     class Meta:
         ordering = ['title']

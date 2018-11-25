@@ -1,12 +1,16 @@
+import xml.etree.ElementTree as et
+
 from django.core.management.base import BaseCommand, CommandError
 from django.contrib.auth.models import User
-import xml.etree.ElementTree as et
 
 from feeds.models import Category
 
+
 class Command(BaseCommand):
-    arg = 'username'
     help = 'Prints the stored feeds to the command line.'
+
+    def add_arguments(self, parser):
+        parser.add_argument('username', help='Dump feeds of this user')
 
     def handle(self, *args, **options):
         opml = et.Element('opml')
@@ -19,21 +23,21 @@ class Command(BaseCommand):
         body = et.SubElement(opml, 'body')
 
         try:
-            user = User.objects.get(username=args[0])
-        except (IndexError,User.DoesNotExist):
+            user = User.objects.get(username=options['username'])
+        except (IndexError, User.DoesNotExist):
             raise CommandError('No valid username given.')
 
         for category in Category.objects.filter(user=user):
-            categoryNode = et.SubElement(body,'outline')
-            categoryNode.set('title',category.title)
-            categoryNode.set('text',category.title)
+            categoryNode = et.SubElement(body, 'outline')
+            categoryNode.set('title', category.title)
+            categoryNode.set('text', category.title)
 
             for subscription in category.subscriptions.all():
                 feedNode = et.SubElement(categoryNode, 'outline')
-                feedNode.set('title',subscription.feed.title)
-                feedNode.set('text',subscription.feed.title)
-                feedNode.set('type','rss')
-                feedNode.set('xmlUrl',subscription.feed.xmlUrl)
-                feedNode.set('htmlUrl',subscription.feed.htmlUrl)
+                feedNode.set('title', subscription.feed.title)
+                feedNode.set('text', subscription.feed.title)
+                feedNode.set('type', 'rss')
+                feedNode.set('xmlUrl', subscription.feed.xmlUrl)
+                feedNode.set('htmlUrl', subscription.feed.htmlUrl)
 
-        print et.tostring(opml)
+        print(et.tostring(opml).decode())

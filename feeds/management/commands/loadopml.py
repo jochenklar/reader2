@@ -2,27 +2,31 @@ from django.core.management.base import BaseCommand, CommandError
 from django.contrib.auth.models import User
 import xml.etree.ElementTree as et
 
-from feeds.models import Category,Subscription,Feed,Meta
+from feeds.models import Category, Subscription, Feed, Meta
+
 
 class Command(BaseCommand):
-    arg = 'username opmlfile'
     help = 'Imports categories and subscriptions from an OPML file.'
+
+    def add_arguments(self, parser):
+        parser.add_argument('username', help='Import feeds for this user')
+        parser.add_argument('opmlfile', help='OPML file')
 
     def handle(self, *args, **options):
         try:
-            user = User.objects.get(username=args[0])
-        except (IndexError,User.DoesNotExist):
+            user = User.objects.get(username=options['username'])
+        except (IndexError, User.DoesNotExist):
             raise CommandError('No valid username given.')
 
         try:
-            xml = et.parse(args[1])
-        except (IndexError,IOError):
+            xml = et.parse(options['opmlfile'])
+        except (IndexError, IOError):
             raise CommandError('No valid inputfile given.')
 
         for categoryNode in xml.find('body').findall('outline'):
             categoryTitle = categoryNode.attrib['title']
 
-            print '    category',categoryTitle
+            print('    category %s' % categoryTitle)
 
             try:
                 category = Category.objects.get(title=categoryTitle,user=user)
@@ -32,10 +36,9 @@ class Command(BaseCommand):
 
             for subscriptionNode in categoryNode.findall('outline'):
                 subscriptionTitle = subscriptionNode.attrib['title']
-                subscriptionHtmlUrl = subscriptionNode.attrib['htmlUrl']
                 subscriptionXmlUrl = subscriptionNode.attrib['xmlUrl']
 
-                print '        subscription',subscriptionTitle
+                print('        subscription %s' % subscriptionTitle)
 
                 try:
                     feed = Feed.objects.get(xmlUrl=subscriptionXmlUrl)

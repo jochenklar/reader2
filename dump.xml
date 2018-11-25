@@ -1,0 +1,93 @@
+<opml version="1.0">
+    <head>
+        <title>Subscriptions</title>
+    </head>
+    <body>
+        <outline text="Bilder" title="Bilder">
+            <outline htmlUrl="https://2kindsofpeople.tumblr.com/" text="2 Kinds of People" title="2 Kinds of People" type="rss" xmlUrl="http://2kindsofpeople.tumblr.com/rss"/>
+        </outline>
+        <outline text="Blogs" title="Blogs">
+            <outline htmlUrl="http://roteinsel.blogspot.com/" text="Rote Insel" title="Rote Insel" type="rss" xmlUrl="http://roteinsel.blogspot.com/feeds/posts/default"/>
+            <outline htmlUrl="http://bakublog.tv" text="Bakublog.tv" title="Bakublog.tv" type="rss" xmlUrl="http://duslog.tv/feed/"/>
+            <outline htmlUrl="http://blog.dieweltistgarnichtso.net" text="Die Welt ist gar nicht so." title="Die Welt ist gar nicht so." type="rss" xmlUrl="http://blog.dieweltistgarnichtso.net/feed"/>
+            <outline htmlUrl="http://blog.odem.org/" text="ODEM.blog" title="ODEM.blog" type="rss" xmlUrl="http://blog.odem.org/atom.xml"/>
+            <outline htmlUrl="https://fionalerntprogrammieren.wordpress.com" text="fiona lernt programmieren" title="fiona lernt programmieren" type="rss" xmlUrl="http://fionalerntprogrammieren.wordpress.com/feed/"/>
+            <outline htmlUrl="http://mspr0.de" text="H I E R" title="H I E R" type="rss" xmlUrl="http://mspr0.de/?feed=rss2"/>
+            <outline htmlUrl="http://www.spreeblick.com" text="SPREEBLICK" title="SPREEBLICK" type="rss" xmlUrl="http://www.spreeblick.com/feed/"/>
+            <outline htmlUrl="http://www.sprachlog.de" text="Sprachlog" title="Sprachlog" type="rss" xmlUrl="http://www.sprachlog.de/feed/"/>
+            <outline htmlUrl="https://blog.buergerbautstadt.de" text="Bürger baut Stadt" title="Bürger baut Stadt" type="rss" xmlUrl="https://blog.buergerbautstadt.de/feed/"/>
+            <outline htmlUrl="https://usaerklaert.wordpress.com" text="USA Erklärt" title="USA Erklärt" type="rss" xmlUrl="http://usaerklaert.wordpress.com/feed/"/>
+            <outline htmlUrl="http://www.ctrl-verlust.net" text="ctrl+verlust" title="ctrl+verlust" type="rss" xmlUrl="http://www.ctrl-verlust.net/feed/"/>
+            <outline htmlUrl="http://www.qlod.org/weltfrieden" text="Gepflegte Konversation fuer den Weltfrieden" title="Gepflegte Konversation fuer den Weltfrieden" type="rss" xmlUrl="http://www.qlod.org/weltfrieden/?feed=rss"/>
+            <outline htmlUrl="https://saschalobo.com" text="saschalobo.com" title="saschalobo.com" type="rss" xmlUrl="http://saschalobo.com/feed/"/>
+            <outline htmlUrl="http://www.stefan-niggemeier.de/blog" text="Stefan Niggemeier" title="Stefan Niggemeier" type="rss" xmlUrl="http://www.stefan-niggemeier.de/blog/feed/"/>
+            <outline htmlUrl="https://neusprech.org" text="neusprech.org" title="neusprech.org" type="rss" xmlUrl="http://neusprech.org/feed/"/>
+            <outline htmlUrl="https://www.brainosphere.de" text="brainosphere 1" title="brainosphere 1" type="rss" xmlUrl="http://www.brainosphere.de/?feed=rss2"/>
+            <outline htmlUrl="https://antjeschrupp.com" text="Aus Liebe zur Freiheit" title="Aus Liebe zur Freiheit" type="rss" xmlUrl="http://antjeschrupp.com/feed/"/>
+            <outline htmlUrl="http://www.wurstblog.de" text="Wurstblog" title="Wurstblog" type="rss" xmlUrl="http://www.wurstblog.de/feed"/>
+            <outline htmlUrl="http://astefanowitsch.tumblr.com/" text="Ephemera" title="Ephemera" type="rss" xmlUrl="http://astefanowitsch.tumblr.com/rss"/>
+            <outline htmlUrl="https://www.supermarktblog.com" text="Supermarktblog" title="Supermarktblog" type="rss" xmlUrl="http://www.supermarktblog.com/feed/"/>
+            <outline htmlUrl="http://wirres.net" text="wirres.net" title="wirres.net" type="rss" xmlUrl="http://feeds2.feedburner.com/wirres"/>
+            <outline htmlUrl="http://jochenklar.de/" text="jochenklar.de" title="jochenklar.de" type="rss" xmlUrl="http://jochenklar.de/feed/"/>
+            <outline htmlUrl="https://blogs.faz.net/berlinabc" text="Berlin ABC" title="Berlin ABC" type="rss" xmlUrl="http://blogs.faz.net/berlinabc/feed/"/>
+            <outline htmlUrl="https://holgi.blogger.de/" text="stackenblochen (rsf)" title="stackenblochen (rsf)" type="rss" xmlUrl="http://holgi.blogger.de/rss"/>
+            <outline htmlUrl="https://gottundco.wordpress.com" text="Gott und Co." title="Gott und Co." type="rss" xmlUrl="https://gottundco.wordpress.com/feed"/>
+            <outline htmlUrl="http://www.adrian-partl.de/" text="Adrian M. Partl" title="Adrian M. Partl" type="rss" xmlUrl="http://www.adrian-partl.de/feed.xml"/>
+            <outline htmlUrl="http://www.indiskretionehrensache.de" text="Indiskretion Ehrensache" title="Indiskretion Ehrensache" type="rss" xmlUrl="http://www.indiskretionehrensache.de/feed/"/>
+            <outline htmlUrl="https://dasnuf.de" text="Das Nuf Advanced" title="Das Nuf Advanced" type="rss" xmlUrl="http://dasnuf.de/feed/"/>
+            <outline htmlUrl="http://www.vierzehnachtzehn.de" text="1914-1918 – Die Entwicklung der Dinge" title="1914-1918 – Die Entwicklung der Dinge" type="rss" xmlUrl="http://www.vierzehnachtzehn.de/feed/"/>
+            <outline htmlUrl="https://www.torial.com/en/katrin.roenicke" text="Katrin Rönicke torial-Feed" title="Katrin Rönicke torial-Feed" type="rss" xmlUrl="https://www.torial.com/en/katrin.roenicke.atom"/>
+        </outline>
+        <outline text="Comics" title="Comics">
+            <outline htmlUrl="http://www.qwantz.com" text="Dinosaur Comics!" title="Dinosaur Comics!" type="rss" xmlUrl="http://www.rsspect.com/rss/qwantz.xml"/>
+            <outline htmlUrl="https://geekandpoke.typepad.com/geekandpoke/" text="Geek And Poke" title="Geek And Poke" type="rss" xmlUrl="http://geekandpoke.typepad.com/geekandpoke/atom.xml"/>
+            <outline htmlUrl="https://abstrusegoose.com" text="Abstruse Goose" title="Abstruse Goose" type="rss" xmlUrl="http://abstrusegoose.com/feed"/>
+            <outline htmlUrl="http://www.phdcomics.com" text="PHD Comics" title="PHD Comics" type="rss" xmlUrl="http://phdcomics.com/gradfeed.php"/>
+            <outline htmlUrl="http://www.commitstrip.com" text="CommitStrip" title="CommitStrip" type="rss" xmlUrl="http://www.commitstrip.com/en/feed/"/>
+            <outline htmlUrl="https://ahoipolloi.blogger.de/" text="ahoi polloi --- ein füllhorn voller fühlhörner" title="ahoi polloi --- ein füllhorn voller fühlhörner" type="rss" xmlUrl="https://ahoipolloi.blogger.de/rss"/>
+            <outline htmlUrl="https://xkcd.com/" text="xkcd.com" title="xkcd.com" type="rss" xmlUrl="http://xkcd.com/atom.xml"/>
+        </outline>
+        <outline text="IT" title="IT">
+            <outline htmlUrl="http://theprofoundprogrammer.com/" text="The Profound Programmer" title="The Profound Programmer" type="rss" xmlUrl="http://theprofoundprogrammer.com/rss"/>
+            <outline htmlUrl="https://lutz.donnerhacke.de/" text="Lutz Donnerhacke Blog" title="Lutz Donnerhacke Blog" type="rss" xmlUrl="http://lutz.donnerhacke.de/rss/feed/blog"/>
+            <outline htmlUrl="http://blog.koehntopp.info" text="The Isoblog." title="The Isoblog." type="rss" xmlUrl="http://blog.koehntopp.info/index.php/feed/"/>
+            <outline htmlUrl="https://www.djangoproject.com/weblog/" text="The Django weblog" title="The Django weblog" type="rss" xmlUrl="https://www.djangoproject.com/rss/weblog/"/>
+            <outline htmlUrl="https://www.debian.org/News/" text="Debian News" title="Debian News" type="rss" xmlUrl="https://www.debian.org/News/news"/>
+            <outline htmlUrl="https://netzpolitik.org" text="netzpolitik.org" title="netzpolitik.org" type="rss" xmlUrl="https://netzpolitik.org/feed/"/>
+        </outline>
+        <outline text="OpenData" title="OpenData">
+            <outline htmlUrl="http://buergerbautstadt.de" text="Bürger baut Stadt (Veröffentlichungen)" title="Bürger baut Stadt (Veröffentlichungen)" type="rss" xmlUrl="https://buergerbautstadt.de/veroeffentlichungen/feed"/>
+        </outline>
+        <outline text="Politik" title="Politik">
+            <outline htmlUrl="http://marinaslied.de" text="Marina Weisband" title="Marina Weisband" type="rss" xmlUrl="http://www.marinaslied.de/?feed=rss2"/>
+            <outline htmlUrl="https://www.christopherlauer.de" text="Christopher Lauer" title="Christopher Lauer" type="rss" xmlUrl="http://www.christopherlauer.de/feed/"/>
+            <outline htmlUrl="https://schwarzblond.wordpress.com" text="schwarzblond" title="schwarzblond" type="rss" xmlUrl="http://schwarzblond.wordpress.com/feed/"/>
+            <outline htmlUrl="http://www.sprengsatz.de" text="SPRENGSATZ _Das Politik-Blog aus Berlin" title="SPRENGSATZ _Das Politik-Blog aus Berlin" type="rss" xmlUrl="http://www.sprengsatz.de/?feed=rss2"/>
+            <outline htmlUrl="http://www.diewunderbareweltderwirtschaft.de/" text="Die wunderbare Welt der Wirtschaft!" title="Die wunderbare Welt der Wirtschaft!" type="rss" xmlUrl="http://www.diewunderbareweltderwirtschaft.de/feeds/posts/default"/>
+            <outline htmlUrl="https://www.peira.org" text="Peira" title="Peira" type="rss" xmlUrl="http://peira.org/feed"/>
+            <outline htmlUrl="https://augengeradeaus.net" text="Augen geradeaus" title="Augen geradeaus" type="rss" xmlUrl="http://augengeradeaus.net/feed/"/>
+        </outline>
+        <outline text="Presse" title="Presse">
+            <outline htmlUrl="https://bildblog.de" text="BILDblog" title="BILDblog" type="rss" xmlUrl="http://www.bildblog.de/wp-rss2.php"/>
+        </outline>
+        <outline text="Recht" title="Recht">
+            <outline htmlUrl="https://www.lawblog.de" text="law blog" title="law blog" type="rss" xmlUrl="http://www.lawblog.de/index.php/feed/"/>
+            <outline htmlUrl="http://www.internet-law.de" text="Internet-Law" title="Internet-Law" type="rss" xmlUrl="http://www.internet-law.de/feed"/>
+            <outline htmlUrl="https://irights.info" text="iRights – Kreativität und Urheberrecht in der digitalen Welt" title="iRights – Kreativität und Urheberrecht in der digitalen Welt" type="rss" xmlUrl="http://irights.info/feed"/>
+        </outline>
+        <outline text="Science" title="Science">
+            <outline htmlUrl="http://blogs.discovermagazine.com/cosmicvariance" text="Cosmic Variance" title="Cosmic Variance" type="rss" xmlUrl="http://feeds.feedburner.com/CosmicVariance"/>
+            <outline htmlUrl="http://www.relativ-kritisch.net/blog" text="RelativKritisch" title="RelativKritisch" type="rss" xmlUrl="http://www.relativ-kritisch.net/blog/feed"/>
+            <outline htmlUrl="http://albertopen.telegrafenberg.de" text="ALBERTopen" title="ALBERTopen" type="rss" xmlUrl="http://albertopen.telegrafenberg.de/?feed=rss2"/>
+            <outline htmlUrl="http://scienceblogs.de/astrodicticum-simplex" text="Astrodicticum Simplex" title="Astrodicticum Simplex" type="rss" xmlUrl="http://scienceblogs.de/astrodicticum-simplex/feed/"/>
+            <outline htmlUrl="https://scilogs.spektrum.de/fischblog" text="Fischblog" title="Fischblog" type="rss" xmlUrl="http://www.scilogs.de/fischblog/feed/"/>
+        </outline>
+        <outline text="Spiele" title="Spiele">
+            <outline htmlUrl="http://nesquester.blogspot.com/" text="NESquester" title="NESquester" type="rss" xmlUrl="http://nesquester.blogspot.com/feeds/posts/default"/>
+            <outline htmlUrl="https://rezensionen-fuer-millionen.blogspot.com/" text="Udo Bartsch: Rezensionen für Millionen" title="Udo Bartsch: Rezensionen für Millionen" type="rss" xmlUrl="http://rezensionen-fuer-millionen.blogspot.com/feeds/posts/default"/>
+        </outline>
+        <outline text="Sport" title="Sport">
+            <outline htmlUrl="https://www.jensweinreich.de" text="SPORT &amp; POLITICS" title="SPORT &amp; POLITICS" type="rss" xmlUrl="https://www.jensweinreich.de/feed/"/>
+        </outline>
+    </body>
+</opml>

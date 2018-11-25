@@ -4,14 +4,16 @@ from django.contrib.auth import authenticate as auth_authenticate
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
 
-from forms import LoginForm
+from .forms import LoginForm
 from feeds.models import Meta
 
+
 def index(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         return render(request,'layout.html', {'updated': Meta.load().updated})
     else:
         return HttpResponseRedirect('/login/')
+
 
 def login(request):
     if request.method == 'POST':
@@ -27,6 +29,7 @@ def login(request):
         form = LoginForm()
 
     return render(request,'layout.html',{'form': form, 'login': True})
+
 
 def logout(request):
     auth_logout(request)
