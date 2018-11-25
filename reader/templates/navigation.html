@@ -6,7 +6,7 @@
         <a class="navbar-brand" href="/">reader</a>
 
         {% if not login %}
-        <ul class="nav navbar-nav hidden-xs">
+        <ul class="nav navbar-nav pull-right">
             <li><a href="" ng-click="firstItem();">First</a></li>
             <li><a href="" ng-click="prevItem();">Up</a></li>
             <li><a href="" ng-click="nextItem();">Down</a></li>
@@ -14,22 +14,5 @@
         {% endif %}
     </div>
 </nav>
-
-{% if not login %}
-<nav class="navbar navbar-default navbar-fixed-bottom visible-xs" role="navigation">
-    <div class="navbar-header">
-        <ul class="nav navbar-nav">
-            <li ng-class="{'active': sidebarVisible}">
-                <a href="" ng-click="toogleSidebar();">Options</a>
-            </li>
-        </ul>
-        <ul class="nav navbar-nav pull-right">
-            <li><a href="" ng-click="firstItem();">First</a></li>
-            <li><a href="" ng-click="prevItem();">Up</a></li>
-            <li><a href="" ng-click="nextItem();">Down</a></li>
-        </ul>
-    </div>
-</nav>
-{% endif %}
 
 <!-- end navigation -->

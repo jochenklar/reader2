@@ -23,12 +23,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 blockquote,
-blockquote p { 
+blockquote p {
     font-size: 1em;
     line-height: 1.428571429;
 }
 
-blockquote {  
+blockquote {
     padding: 0 10px 0 10px;
     margin-bottom: 10px;
 }
@@ -70,10 +70,6 @@ nav.navbar-fixed-top a:focus,
 nav.navbar-fixed-top a:visited,
 nav.navbar-fixed-top a:hover {
     color: #fff !important;
-}
-
-nav.navbar-fixed-bottom {
-    height: 90px;
 }
 
 /* sidebar */
@@ -165,7 +161,7 @@ nav.navbar-fixed-bottom {
 .item h2.visited {
     color: inherit;
 }
-.item.active h2 { 
+.item.active h2 {
     font-weight: bold;
 }
 
@@ -173,7 +169,7 @@ nav.navbar-fixed-bottom {
 .item .body .row {
     margin: 0;
 }
-.item img { 
+.item img {
     max-width: 100%;
 }
 .modal-body {
