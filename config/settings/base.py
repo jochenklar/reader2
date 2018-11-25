@@ -58,6 +58,8 @@ USE_L10N = True
 
 USE_TZ = True
 
+SESSION_COOKIE_AGE = 60 * 60 * 24 * 30
+
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_root/')
 STATICFILES_DIRS = (
