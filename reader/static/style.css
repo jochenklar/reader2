@@ -37,16 +37,6 @@ blockquote {
     margin-top: 70px;
 }
 
-@media (max-width: 768px) {
-    .navbar-fixed-top {
-        position: relative;
-    }
-    #content {
-        margin-top: -10px;
-        margin-bottom: 50px;
-    }
-}
-
 /* navigation */
 nav {
     height: 50px;
