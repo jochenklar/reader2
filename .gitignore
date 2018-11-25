@@ -12,6 +12,8 @@ build
 dist
 *.egg-info
 
+config/settings/local.py
+
 static_root/
 media_root/
 

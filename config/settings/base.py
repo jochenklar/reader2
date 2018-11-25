@@ -62,9 +62,6 @@ SESSION_COOKIE_AGE = 60 * 60 * 24 * 30
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_root/')
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'vendor/'),
-)
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
